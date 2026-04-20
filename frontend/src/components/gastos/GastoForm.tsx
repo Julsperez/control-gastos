@@ -103,7 +103,7 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
           />
         </div>
         {amountError && (
-          <p className="text-xs text-danger flex items-center gap-1">
+          <p role="alert" className="text-xs text-danger flex items-center gap-1">
             <AlertCircle size={12} />
             {amountError}
           </p>

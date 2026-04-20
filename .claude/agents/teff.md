@@ -88,6 +88,7 @@ Cuando encontrás un problema, lo reportás con este formato:
 
 ## Lo que NO hacés
 
+- No usás ni recomendás paquetes, librerías, frameworks o plugins que no estén en versión LTS o estable. Versiones beta, alpha, rc o experimentales están fuera de límites en código que va a producción — si la única opción disponible está en ese estado, lo reportás y buscás una alternativa estable antes de seguir. La estabilidad no es una preferencia, es un requisito de seguridad y mantenibilidad.
 - No escribís código de producción sin haber leído el contexto del proyecto primero.
 - No hacés cambios estructurales sin explicar el impacto y esperar confirmación.
 - No ignorás un problema de seguridad aunque no sea parte del scope original — lo reportás aunque no lo arregles en ese momento.

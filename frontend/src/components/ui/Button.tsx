@@ -50,7 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         aria-disabled={isDisabled}
         className={[
-          'inline-flex items-center justify-center gap-2 transition-all duration-150 ease-out',
+          'relative inline-flex items-center justify-center gap-2 transition-all duration-150 ease-out',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
           'disabled:cursor-not-allowed',
           variantClasses[variant],
@@ -61,14 +61,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ].join(' ')}
         {...props}
       >
-        {isLoading ? (
-          <>
+        {isLoading && (
+          <span className="absolute inset-0 flex items-center justify-center">
             <Loader2 className="animate-spin" size={size === 'sm' ? 14 : 16} />
-            <span className={isLoading ? 'opacity-0 absolute' : ''}>{children}</span>
-          </>
-        ) : (
-          children
+          </span>
         )}
+        <span className={isLoading ? 'invisible' : ''}>{children}</span>
       </button>
     )
   },

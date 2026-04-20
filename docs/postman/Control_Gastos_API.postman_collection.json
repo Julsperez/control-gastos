@@ -1,0 +1,922 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Control de Gastos Personales - API",
+    "description": "Colección completa para la API del sistema de Control de Gastos Personales. Stack: FastAPI + SQLite3 + PyJWT. Base URL: http://localhost:8000/api/v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_prefix",
+      "value": "/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "test_email",
+      "value": "test@ejemplo.com",
+      "type": "string"
+    },
+    {
+      "key": "test_password",
+      "value": "contraseña123",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Endpoint público de health check. No requiere autenticación ni prefijo /api/v1."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "description": "Endpoints de autenticación. No requieren Bearer Token.",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\",\n  \"full_name\": \"Juan Pérez\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/auth/register",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Registra un nuevo usuario. Devuelve access_token, refresh_token y datos del usuario. Los tokens se guardan automáticamente en variables de colección."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene access_token\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"access_token\");",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene refresh_token\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"refresh_token\");",
+                  "});",
+                  "",
+                  "const res = pm.response.json();",
+                  "pm.collectionVariables.set(\"access_token\", res.access_token);",
+                  "pm.collectionVariables.set(\"refresh_token\", res.refresh_token);"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/auth/login",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Autentica un usuario existente. Devuelve access_token (15min TTL), refresh_token y datos del usuario. Los tokens se guardan automáticamente en variables de colección."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene access_token\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"access_token\");",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene refresh_token\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"refresh_token\");",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene datos del usuario\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"user\");",
+                  "});",
+                  "",
+                  "const res = pm.response.json();",
+                  "pm.collectionVariables.set(\"access_token\", res.access_token);",
+                  "pm.collectionVariables.set(\"refresh_token\", res.refresh_token);"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/auth/refresh",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Renueva el access_token usando el refresh_token. Útil cuando el access_token expira a los 15 minutos. Actualiza ambos tokens automáticamente en variables de colección."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene access_token renovado\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"access_token\");",
+                  "});",
+                  "",
+                  "const res = pm.response.json();",
+                  "pm.collectionVariables.set(\"access_token\", res.access_token);",
+                  "pm.collectionVariables.set(\"refresh_token\", res.refresh_token);"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gastos",
+      "description": "CRUD de gastos. Todos los endpoints requieren Bearer Token.",
+      "item": [
+        {
+          "name": "Listar gastos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"]
+            },
+            "description": "Devuelve todos los gastos del usuario autenticado. Sin filtros devuelve todos los registros."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene items\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"items\");",
+                  "    pm.expect(res.items).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene total\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"total\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Listar gastos - filtrar por mes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos?mes=2026-04",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"],
+              "query": [
+                {
+                  "key": "mes",
+                  "value": "2026-04",
+                  "description": "Filtrar por mes en formato YYYY-MM"
+                }
+              ]
+            },
+            "description": "Filtra los gastos por mes. El parámetro mes acepta formato YYYY-MM."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene items\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"items\");",
+                  "    pm.expect(res.items).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Listar gastos - filtrar por categoría",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos?categoria_id=1",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"],
+              "query": [
+                {
+                  "key": "categoria_id",
+                  "value": "1",
+                  "description": "1=Alimentación, 2=Transporte, 3=Hogar, 4=Salud, 5=Ocio, 6=Ropa, 7=Educación, 8=Servicios, 9=Viajes, 10=Otros"
+                }
+              ]
+            },
+            "description": "Filtra los gastos por categoría usando categoria_id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene items\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"items\");",
+                  "    pm.expect(res.items).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Listar gastos - filtrar por mes y categoría",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos?mes=2026-04&categoria_id=2",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"],
+              "query": [
+                {
+                  "key": "mes",
+                  "value": "2026-04"
+                },
+                {
+                  "key": "categoria_id",
+                  "value": "2",
+                  "description": "2=Transporte"
+                }
+              ]
+            },
+            "description": "Combina los filtros de mes y categoría."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene items y sum\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"items\");",
+                  "    pm.expect(res).to.have.property(\"sum\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear gasto - Supermercado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 15800.50,\n  \"category_id\": 1,\n  \"description\": \"Compras semanales en Carrefour\",\n  \"fecha\": \"2026-04-12\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"]
+            },
+            "description": "Registra un gasto de supermercado (Alimentación). Monto en pesos ARS."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Gasto creado con amount correcto\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"amount\");",
+                  "    pm.expect(res.amount).to.eql(15800.50);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear gasto - SUBE / Transporte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 3200.00,\n  \"category_id\": 2,\n  \"description\": \"Recarga tarjeta SUBE\",\n  \"fecha\": \"2026-04-10\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"]
+            },
+            "description": "Registra un gasto de transporte (recarga SUBE). Monto en pesos ARS."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear gasto - Servicios",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 28500.00,\n  \"category_id\": 8,\n  \"description\": \"Factura Edenor - electricidad\",\n  \"fecha\": \"2026-04-05\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"]
+            },
+            "description": "Registra un gasto de servicios (factura de luz). Monto en pesos ARS."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear gasto - sin fecha (opcional)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 9500.00,\n  \"category_id\": 5,\n  \"description\": \"Entradas cine Hoyts\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos"]
+            },
+            "description": "Registra un gasto de ocio sin especificar fecha (el backend asigna la fecha actual). description también es opcional."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Eliminar gasto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/gastos/1",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["gastos", "1"]
+            },
+            "description": "Elimina un gasto por ID. Devuelve 204 No Content. Reemplazar el '1' del path por el ID real del gasto a eliminar."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 204 No Content\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categorías",
+      "description": "Gestión de categorías de gastos. Todos los endpoints requieren Bearer Token.",
+      "item": [
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/categorias",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["categorias"]
+            },
+            "description": "Devuelve todas las categorías disponibles. Las categorías del sistema son: Alimentación, Transporte, Hogar, Salud, Ocio, Ropa, Educación, Servicios, Viajes, Otros."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta contiene items\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"items\");",
+                  "    pm.expect(res.items).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Lista de categorías no está vacía\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res.items.length).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear categoría - con color e ícono",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mascotas\",\n  \"color\": \"#F59E0B\",\n  \"icon\": \"paw\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/categorias",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["categorias"]
+            },
+            "description": "Crea una categoría personalizada con nombre, color (hex) e ícono."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Categoría creada con nombre correcto\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.have.property(\"name\");",
+                  "    pm.expect(res.name).to.eql(\"Mascotas\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Crear categoría - solo nombre (campos opcionales omitidos)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Impuestos y tasas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/categorias",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["categorias"]
+            },
+            "description": "Crea una categoría usando solo el campo requerido. color e icon son opcionales."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "description": "Resumen y estadísticas de gastos. Requiere Bearer Token.",
+      "item": [
+        {
+          "name": "Resumen general",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/dashboard/resumen",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["dashboard", "resumen"]
+            },
+            "description": "Devuelve el resumen completo de gastos sin filtro de mes (todos los registros del usuario)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta es un objeto válido\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.be.an(\"object\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Resumen por mes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/dashboard/resumen?mes=2026-04",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["dashboard", "resumen"],
+              "query": [
+                {
+                  "key": "mes",
+                  "value": "2026-04",
+                  "description": "Filtrar resumen por mes en formato YYYY-MM"
+                }
+              ]
+            },
+            "description": "Devuelve el resumen de gastos filtrado por mes (abril 2026). Incluye totales, breakdown por categoría y demás estadísticas del período."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Respuesta es un objeto válido\", function () {",
+                  "    const res = pm.response.json();",
+                  "    pm.expect(res).to.be.an(\"object\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Resumen mes anterior",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/dashboard/resumen?mes=2026-03",
+              "host": ["{{base_url}}{{api_prefix}}"],
+              "path": ["dashboard", "resumen"],
+              "query": [
+                {
+                  "key": "mes",
+                  "value": "2026-03",
+                  "description": "Mes anterior para comparación"
+                }
+              ]
+            },
+            "description": "Resumen del mes anterior (marzo 2026). Útil para comparación período a período."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}

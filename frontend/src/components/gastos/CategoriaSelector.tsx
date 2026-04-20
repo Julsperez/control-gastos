@@ -16,8 +16,8 @@ export function CategoriaSelector({
   error,
 }: CategoriaSelectorProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-neutral-700">Categoría</label>
+    <fieldset className="flex flex-col gap-2">
+      <legend className="text-sm font-medium text-neutral-700">Categoría</legend>
       <div className="flex flex-wrap gap-2">
         {categorias.map((cat) => {
           const isSelected = selectedId === cat.id
@@ -57,7 +57,7 @@ export function CategoriaSelector({
           )
         })}
       </div>
-      {error && <p className="text-xs text-danger">{error}</p>}
-    </div>
+      {error && <p role="alert" className="text-xs text-danger">{error}</p>}
+    </fieldset>
   )
 }

@@ -36,7 +36,9 @@ const KEYS = {
 interface StoredUser {
   id: number
   email: string
-  password: string  // En LocalStorage guardamos en claro (es solo dev)
+  // ADVERTENCIA: contraseña en texto claro — solo para modo dev/local sin backend.
+  // Nunca usar en producción. Cambiar VITE_DATA_SOURCE=api para usar el backend real.
+  password: string
   full_name: string | null
 }
 
@@ -87,6 +89,15 @@ function getDaysInMonth(yearMonth: string): string[] {
 
 export class LocalStorageGastosService implements IGastosService {
   private currentUserId: number | null = null
+
+  constructor() {
+    if (import.meta.env.DEV) {
+      console.warn(
+        '[LocalStorageService] Running in local/dev mode — passwords stored in plaintext. ' +
+        'Set VITE_DATA_SOURCE=api to use the real backend.',
+      )
+    }
+  }
 
   private getUsers(): StoredUser[] {
     return read<StoredUser[]>(KEYS.USERS, [])

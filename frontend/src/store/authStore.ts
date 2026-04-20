@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { AuthResponse, User } from '../types'
+import type { AuthResponse, AuthTokens, User } from '../types'
 
 interface AuthState {
   user: User | null
@@ -8,6 +8,7 @@ interface AuthState {
   refreshToken: string | null
   isAuthenticated: boolean
   setAuth: (response: AuthResponse) => void
+  updateTokens: (tokens: AuthTokens) => void
   clearAuth: () => void
 }
 
@@ -25,6 +26,12 @@ export const useAuthStore = create<AuthState>()(
           accessToken: response.access_token,
           refreshToken: response.refresh_token,
           isAuthenticated: true,
+        }),
+
+      updateTokens: (tokens: AuthTokens) =>
+        set({
+          accessToken: tokens.access_token,
+          refreshToken: tokens.refresh_token,
         }),
 
       clearAuth: () =>

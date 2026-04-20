@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { LogOut, AlertCircle } from 'lucide-react'
 import { DashboardSkeleton } from '../components/ui/Skeleton'
 import { EmptyState } from '../components/ui/EmptyState'
@@ -15,8 +15,18 @@ import { useAuthStore } from '../store/authStore'
 import { Button } from '../components/ui/Button'
 
 function useIsMobile(): boolean {
-  if (typeof window === 'undefined') return true
-  return window.innerWidth < 640
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === 'undefined' ? true : window.innerWidth < 640,
+  )
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 639px)')
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
+
+  return isMobile
 }
 
 export function DashboardPage() {
@@ -112,7 +122,7 @@ export function DashboardPage() {
                 )}
               </div>
               <div className="flex flex-col gap-4">
-                <GastosList />
+                
                 <Button
                   variant="primary"
                   size="md"
@@ -121,6 +131,7 @@ export function DashboardPage() {
                 >
                   Registrar nuevo gasto
                 </Button>
+                <GastosList />
               </div>
             </div>
           </>
@@ -128,7 +139,7 @@ export function DashboardPage() {
       </main>
 
       {/* FAB — solo en mobile */}
-      <div className="lg:hidden">
+      <div className="lg:hidden" aria-hidden="true">
         <FAB isOpen={formOpen} onClick={() => setFormOpen((v) => !v)} />
       </div>
 

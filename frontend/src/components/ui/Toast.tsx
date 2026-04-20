@@ -21,7 +21,7 @@ const colorMap = {
 
 function ToastItem({ toast }: ToastItemProps) {
   const { dismissToast } = useToast()
-  const duration = toast.duration ?? 2500
+  const duration = toast.duration ?? 3000
 
   useEffect(() => {
     const t = setTimeout(() => dismissToast(toast.id), duration)

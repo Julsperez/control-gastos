@@ -1,7 +1,7 @@
 # Sistema de Diseño — Control de Gastos Personales
 
-**Versión:** 1.0.0  
-**Fecha:** 2026-04-10  
+**Versión:** 1.1.0  
+**Fecha:** 2026-04-14 (actualizado en Fase 4)  
 **Autor:** Richard (UX Designer)  
 **Destinatario principal:** Teff (Frontend Engineer)  
 **Stack:** Vite + React + TypeScript | FastAPI + SQLite3 | Mobile-first | WCAG 2.1 AA
@@ -245,6 +245,8 @@ Estos tres principios son la regla de oro para tomar cualquier decisión visual 
 #### Colores de categorías de gasto
 
 Estos colores se usan en gráficos, badges y cualquier referencia visual a la categoría. Son inmutables — no varían por contexto.
+
+> **Nota (Fase 4 — 2026-04-14):** Estos valores son la fuente de verdad visual y están sincronizados con `frontend/src/types/index.ts` (SYSTEM_CATEGORIES) y `backend/app/_seed.py`. El ADR-001 sección 2.2 tiene colores desactualizados — prevalece este documento para decisiones visuales.
 
 | Categoría | Color | Hex |
 |---|---|---|

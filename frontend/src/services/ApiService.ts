@@ -12,6 +12,7 @@ import type {
   RegisterRequest,
 } from '../types'
 import type { IGastosService } from './GastosService'
+import { useAuthStore } from '../store/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -26,19 +27,11 @@ export class ApiGastosService implements IGastosService {
       headers: { 'Content-Type': 'application/json' },
     })
 
-    // Inyectar access token en cada request
+    // Inyectar access token desde el store de Zustand en cada request
     this.client.interceptors.request.use((config) => {
-      const raw = localStorage.getItem('cg_auth')
-      if (raw) {
-        try {
-          const auth = JSON.parse(raw) as { state: { accessToken: string | null } }
-          const token = auth?.state?.accessToken
-          if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`
-          }
-        } catch {
-          // ignorar
-        }
+      const token = useAuthStore.getState().accessToken
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`
       }
       return config
     })
@@ -61,32 +54,19 @@ export class ApiGastosService implements IGastosService {
                 }
                 resolve(this.client(originalRequest))
               })
-              // Reject si no se puede refrescar
               setTimeout(() => reject(error), 10000)
             })
           }
 
           this.isRefreshing = true
           try {
-            const raw = localStorage.getItem('cg_auth')
-            const refreshToken = raw
-              ? (JSON.parse(raw) as { state: { refreshToken: string | null } }).state?.refreshToken
-              : null
-
+            const refreshToken = useAuthStore.getState().refreshToken
             if (!refreshToken) throw new Error('No refresh token')
 
             const newTokens = await this.refresh(refreshToken)
 
-            // Actualizar el store de Zustand directamente en localStorage
-            const authRaw = localStorage.getItem('cg_auth')
-            if (authRaw) {
-              const authData = JSON.parse(authRaw) as {
-                state: { accessToken: string; refreshToken: string }
-              }
-              authData.state.accessToken = newTokens.access_token
-              authData.state.refreshToken = newTokens.refresh_token
-              localStorage.setItem('cg_auth', JSON.stringify(authData))
-            }
+            // Actualizar tokens en el store de Zustand (persiste automáticamente vía middleware)
+            useAuthStore.getState().updateTokens(newTokens)
 
             this.refreshQueue.forEach((cb) => cb(newTokens.access_token))
             this.refreshQueue = []
@@ -96,8 +76,8 @@ export class ApiGastosService implements IGastosService {
             }
             return this.client(originalRequest)
           } catch {
-            // Logout: limpiar auth y redirigir
-            localStorage.removeItem('cg_auth')
+            // Logout: limpiar store y redirigir
+            useAuthStore.getState().clearAuth()
             window.location.href = '/login'
             throw error
           } finally {

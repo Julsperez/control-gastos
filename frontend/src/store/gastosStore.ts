@@ -41,6 +41,7 @@ export const useGastosStore = create<GastosState>()((set) => ({
     set({
       dashboard: null,
       gastos: [],
+      categorias: [],
       isLoading: false,
       error: null,
       mesActual: currentMonth(),
