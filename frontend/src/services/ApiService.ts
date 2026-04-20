@@ -2,6 +2,8 @@ import axios, { type AxiosInstance, type AxiosRequestConfig, isAxiosError } from
 import type {
   AuthResponse,
   AuthTokens,
+  BudgetSettings,
+  BudgetStatus,
   Categoria,
   CategoriaCreate,
   DashboardResumen,
@@ -152,6 +154,22 @@ export class ApiGastosService implements IGastosService {
     const params: Record<string, string> = {}
     if (mes) params['mes'] = mes
     const res = await this.client.get<DashboardResumen>('/dashboard/resumen', { params })
+    return res.data
+  }
+
+  // ----------------------------------------------------------
+  // Budget
+  // ----------------------------------------------------------
+
+  async getBudgetStatus(mes?: string): Promise<BudgetStatus> {
+    const params: Record<string, string> = {}
+    if (mes) params['mes'] = mes
+    const res = await this.client.get<BudgetStatus>('/budget/status', { params })
+    return res.data
+  }
+
+  async updateBudgetSettings(settings: BudgetSettings): Promise<BudgetStatus> {
+    const res = await this.client.put<BudgetStatus>('/budget/settings', settings)
     return res.data
   }
 }

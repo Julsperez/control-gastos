@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getGastosService } from '../services/GastosService'
 import { useGastosStore } from '../store/gastosStore'
+import { useBudgetStore } from '../store/budgetStore'
 import { useToast } from './useToast'
 import type { GastoCreate } from '../types'
 
@@ -8,6 +9,7 @@ export function useGastos(onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const { addGasto, removeGasto, setDashboard, mesActual } = useGastosStore()
+  const { setBudgetStatus } = useBudgetStore()
   const { showToast } = useToast()
 
   async function handleAddGasto(data: GastoCreate): Promise<boolean> {
@@ -18,9 +20,13 @@ export function useGastos(onSuccess?: () => void) {
       const newGasto = await svc.addGasto(data)
       addGasto(newGasto)
 
-      // Refrescar dashboard
-      const dashboard = await svc.getDashboardData(mesActual)
+      // Refrescar dashboard y presupuesto en paralelo
+      const [dashboard, budgetStatus] = await Promise.all([
+        svc.getDashboardData(mesActual),
+        svc.getBudgetStatus(mesActual),
+      ])
       setDashboard(dashboard)
+      setBudgetStatus(budgetStatus)
 
       showToast('Gasto registrado', 'success', 2500)
       onSuccess?.()
@@ -39,9 +45,13 @@ export function useGastos(onSuccess?: () => void) {
       await svc.deleteGasto(id)
       removeGasto(id)
 
-      // Refrescar dashboard
-      const dashboard = await svc.getDashboardData(mesActual)
+      // Refrescar dashboard y presupuesto en paralelo
+      const [dashboard, budgetStatus] = await Promise.all([
+        svc.getDashboardData(mesActual),
+        svc.getBudgetStatus(mesActual),
+      ])
       setDashboard(dashboard)
+      setBudgetStatus(budgetStatus)
     } catch {
       showToast('Error al eliminar el gasto.', 'error')
     }

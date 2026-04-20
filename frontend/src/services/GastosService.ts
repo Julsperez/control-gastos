@@ -1,6 +1,8 @@
 import type {
   AuthResponse,
   AuthTokens,
+  BudgetSettings,
+  BudgetStatus,
   Categoria,
   CategoriaCreate,
   DashboardResumen,
@@ -32,6 +34,10 @@ export interface IGastosService {
 
   // Dashboard
   getDashboardData(mes?: string): Promise<DashboardResumen>
+
+  // Budget
+  getBudgetStatus(mes?: string): Promise<BudgetStatus>
+  updateBudgetSettings(settings: BudgetSettings): Promise<BudgetStatus>
 }
 
 // ============================================================

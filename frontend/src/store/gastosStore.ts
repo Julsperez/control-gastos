@@ -12,6 +12,7 @@ interface GastosState {
 
   setMes: (mes: string) => void
   setDashboard: (data: DashboardResumen) => void
+  setGastos: (gastos: Gasto[]) => void
   addGasto: (gasto: Gasto) => void
   removeGasto: (id: number) => void
   setCategorias: (cats: Categoria[]) => void
@@ -30,6 +31,7 @@ export const useGastosStore = create<GastosState>()((set) => ({
 
   setMes: (mes) => set({ mesActual: mes }),
   setDashboard: (data) => set({ dashboard: data }),
+  setGastos: (gastos) => set({ gastos }),
   addGasto: (gasto) =>
     set((state) => ({ gastos: [gasto, ...state.gastos] })),
   removeGasto: (id) =>

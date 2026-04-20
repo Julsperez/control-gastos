@@ -108,6 +108,28 @@ export interface DashboardResumen {
 }
 
 // ============================================================
+// Budget types
+// ============================================================
+
+export type AlertLevel = 'none' | 'warning' | 'critical' | 'exceeded'
+
+export interface BudgetStatus {
+  budget: number | null
+  spent: number
+  remaining: number | null
+  percentage_used: number | null
+  alert_level: AlertLevel
+  alert_threshold_warning: number
+  alert_threshold_critical: number
+}
+
+export interface BudgetSettings {
+  monthly_budget: number | null
+  alert_threshold_warning: number
+  alert_threshold_critical: number
+}
+
+// ============================================================
 // UI / App types
 // ============================================================
 

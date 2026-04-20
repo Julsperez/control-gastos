@@ -20,6 +20,9 @@ class UserOut(BaseModel):
     id: int
     email: str
     full_name: str | None
+    monthly_budget: float | None = None
+    alert_threshold_warning: int = 70
+    alert_threshold_critical: int = 90
 
     model_config = {"from_attributes": True}
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { LogOut, AlertCircle } from 'lucide-react'
+import { LogOut, AlertCircle, Settings } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { DashboardSkeleton } from '../components/ui/Skeleton'
 import { EmptyState } from '../components/ui/EmptyState'
 import { FAB } from '../components/ui/FAB'
@@ -8,8 +9,11 @@ import { Modal } from '../components/ui/Modal'
 import { ResumenMes } from '../components/dashboard/ResumenMes'
 import { GraficoBarras } from '../components/dashboard/GraficoBarras'
 import { GastosList } from '../components/dashboard/GastosList'
+import { BudgetWidget } from '../components/dashboard/BudgetWidget'
+import { BudgetAlertBanner } from '../components/dashboard/BudgetAlertBanner'
 import { GastoForm } from '../components/gastos/GastoForm'
 import { useDashboard } from '../hooks/useDashboard'
+import { useBudget } from '../hooks/useBudget'
 import { useAuth } from '../hooks/useAuth'
 import { useAuthStore } from '../store/authStore'
 import { Button } from '../components/ui/Button'
@@ -32,9 +36,11 @@ function useIsMobile(): boolean {
 export function DashboardPage() {
   const [formOpen, setFormOpen] = useState(false)
   const { dashboard, isLoading, error, refetch } = useDashboard()
+  const { budgetStatus } = useBudget()
   const { logout } = useAuth()
   const user = useAuthStore((s) => s.user)
   const isMobile = useIsMobile()
+  const navigate = useNavigate()
 
   const initials = user?.full_name
     ? user.full_name.split(' ').slice(0, 2).map((n) => n[0]).join('').toUpperCase()
@@ -67,6 +73,13 @@ export function DashboardPage() {
             <span className="text-sm font-bold text-primary">{initials}</span>
           </div>
           <button
+            onClick={() => navigate('/settings')}
+            aria-label="Configuración"
+            className="p-2 text-neutral-400 hover:text-neutral-700 transition-colors"
+          >
+            <Settings size={18} />
+          </button>
+          <button
             onClick={logout}
             aria-label="Cerrar sesión"
             className="p-2 text-neutral-400 hover:text-neutral-700 transition-colors"
@@ -75,6 +88,10 @@ export function DashboardPage() {
           </button>
         </div>
       </header>
+
+      {budgetStatus && budgetStatus.alert_level !== 'none' && (
+        <BudgetAlertBanner status={budgetStatus} />
+      )}
 
       {/* Contenido */}
       <main>
@@ -96,6 +113,7 @@ export function DashboardPage() {
           <>
             {/* Layout mobile: una columna */}
             <div className="lg:hidden flex flex-col gap-3 p-4 pb-24">
+              <BudgetWidget status={budgetStatus} />
               <ResumenMes
                 totalMes={dashboard.total_mes}
                 totalMesAnterior={dashboard.total_mes_anterior}
@@ -122,7 +140,7 @@ export function DashboardPage() {
                 )}
               </div>
               <div className="flex flex-col gap-4">
-                
+                <BudgetWidget status={budgetStatus} />
                 <Button
                   variant="primary"
                   size="md"

@@ -4,6 +4,7 @@ import { ToastProvider } from './components/ui/ToastProvider'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { SettingsPage } from './pages/SettingsPage'
 import { useAuthStore } from './store/authStore'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -23,6 +24,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             }
           />

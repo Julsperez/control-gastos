@@ -1,6 +1,9 @@
 import type {
+  AlertLevel,
   AuthResponse,
   AuthTokens,
+  BudgetSettings,
+  BudgetStatus,
   Categoria,
   CategoriaCreate,
   DashboardResumen,
@@ -27,6 +30,7 @@ const KEYS = {
   CATEGORIAS_CUSTOM: 'cg_categorias_custom',
   NEXT_GASTO_ID: 'cg_next_gasto_id',
   NEXT_CAT_ID: 'cg_next_cat_id',
+  BUDGET_SETTINGS: 'cg_budget_settings',
 } as const
 
 // ============================================================
@@ -333,5 +337,66 @@ export class LocalStorageGastosService implements IGastosService {
       gasto_diario,
       top_categorias,
     }
+  }
+
+  // ----------------------------------------------------------
+  // Budget
+  // ----------------------------------------------------------
+
+  private readBudgetSettings(): BudgetSettings {
+    return read<BudgetSettings>(KEYS.BUDGET_SETTINGS, {
+      monthly_budget: null,
+      alert_threshold_warning: 70,
+      alert_threshold_critical: 90,
+    })
+  }
+
+  private computeBudgetStatus(settings: BudgetSettings, spent: number): BudgetStatus {
+    const { monthly_budget: budget, alert_threshold_warning, alert_threshold_critical } = settings
+
+    if (budget === null) {
+      return {
+        budget: null,
+        spent,
+        remaining: null,
+        percentage_used: null,
+        alert_level: 'none',
+        alert_threshold_warning,
+        alert_threshold_critical,
+      }
+    }
+
+    const remaining = budget - spent
+    const percentage_used = Math.round((spent / budget) * 10000) / 100
+
+    let alert_level: AlertLevel
+    if (spent > budget) alert_level = 'exceeded'
+    else if (percentage_used >= alert_threshold_critical) alert_level = 'critical'
+    else if (percentage_used >= alert_threshold_warning) alert_level = 'warning'
+    else alert_level = 'none'
+
+    return { budget, spent, remaining, percentage_used, alert_level, alert_threshold_warning, alert_threshold_critical }
+  }
+
+  async getBudgetStatus(mes?: string): Promise<BudgetStatus> {
+    await delay(100)
+    const targetMes = mes ?? currentMonth()
+    const gastos = this.readGastos().filter((g) => g.fecha.startsWith(targetMes))
+    const spent = gastos.reduce((acc, g) => acc + g.amount, 0)
+    return this.computeBudgetStatus(this.readBudgetSettings(), spent)
+  }
+
+  async updateBudgetSettings(settings: BudgetSettings): Promise<BudgetStatus> {
+    await delay(200)
+    if (settings.monthly_budget !== null && settings.monthly_budget <= 0) {
+      throw Object.assign(new Error('El presupuesto debe ser positivo'), { status: 422 })
+    }
+    if (settings.alert_threshold_warning >= settings.alert_threshold_critical) {
+      throw Object.assign(new Error('El umbral de advertencia debe ser menor al crítico'), { status: 422 })
+    }
+    write(KEYS.BUDGET_SETTINGS, settings)
+    const gastos = this.readGastos().filter((g) => g.fecha.startsWith(currentMonth()))
+    const spent = gastos.reduce((acc, g) => acc + g.amount, 0)
+    return this.computeBudgetStatus(settings, spent)
   }
 }
