@@ -69,6 +69,21 @@ def create_gasto(
     return gasto
 
 
+@router.get("/available-months", response_model=list[str])
+def get_available_months(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    rows = (
+        db.query(func.strftime("%Y-%m", Gasto.fecha))
+        .filter(Gasto.user_id == current_user.id)
+        .distinct()
+        .order_by(func.strftime("%Y-%m", Gasto.fecha).desc())
+        .all()
+    )
+    return [r[0] for r in rows]
+
+
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_gasto(
     id: int = Path(...),

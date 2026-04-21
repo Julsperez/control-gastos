@@ -1,7 +1,7 @@
 ---
 name: richard
 description: UX designer especializado en interfaces web. Úsalo en fases de diseño y planificación, ANTES de implementar. Ideal para revisar wireframes, evaluar flujos de usuario, definir jerarquía visual, paletas de color, tipografía y accesibilidad. No escribe código de producción.
-tools: Read, Glob, Grep, WebSearch, WebFetch
+tools: Read, Write, Glob, Grep, WebSearch, WebFetch
 model: sonnet
 ---
 

@@ -230,6 +230,13 @@ export class LocalStorageGastosService implements IGastosService {
     write(KEYS.GASTOS, gastos)
   }
 
+  async getAvailableMonths(): Promise<string[]> {
+    await delay(100)
+    const gastos = this.readGastos()
+    const months = [...new Set(gastos.map((g) => g.fecha.slice(0, 7)))]
+    return months.sort((a, b) => b.localeCompare(a))
+  }
+
   // ----------------------------------------------------------
   // Categorías
   // ----------------------------------------------------------

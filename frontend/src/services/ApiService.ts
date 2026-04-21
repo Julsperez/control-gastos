@@ -132,6 +132,11 @@ export class ApiGastosService implements IGastosService {
     await this.client.delete(`/gastos/${id}`)
   }
 
+  async getAvailableMonths(): Promise<string[]> {
+    const res = await this.client.get<string[]>('/gastos/available-months')
+    return res.data
+  }
+
   // ----------------------------------------------------------
   // Categorías
   // ----------------------------------------------------------

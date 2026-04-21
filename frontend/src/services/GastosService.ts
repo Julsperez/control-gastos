@@ -32,6 +32,9 @@ export interface IGastosService {
   getCategorias(): Promise<Categoria[]>
   addCategoria(data: CategoriaCreate): Promise<Categoria>
 
+  // Meses disponibles
+  getAvailableMonths(): Promise<string[]>
+
   // Dashboard
   getDashboardData(mes?: string): Promise<DashboardResumen>
 
