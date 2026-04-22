@@ -6,6 +6,9 @@ export interface User {
   id: number
   email: string
   full_name: string | null
+  monthly_budget?: number | null
+  alert_threshold_warning?: number
+  alert_threshold_critical?: number
 }
 
 export interface AuthTokens {
