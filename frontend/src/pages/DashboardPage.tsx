@@ -17,6 +17,7 @@ import { useBudget } from '../hooks/useBudget'
 import { useAuth } from '../hooks/useAuth'
 import { useAuthStore } from '../store/authStore'
 import { Button } from '../components/ui/Button'
+import { ThemeToggle } from '../components/ui/ThemeToggle'
 
 function useIsMobile(): boolean {
   const [isMobile, setIsMobile] = useState(() =>
@@ -57,32 +58,33 @@ export function DashboardPage() {
   const dateStr = today.toLocaleDateString('es-AR', { day: 'numeric', month: 'long' })
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Header sticky */}
-      <header className="sticky top-0 z-30 bg-surface border-b border-neutral-200 h-14 flex items-center px-4 justify-between">
+      <header className="glass-header sticky top-0 z-30 h-14 flex items-center px-4 justify-between">
         <div>
-          <p className="text-base font-semibold text-neutral-900">
+          <p className="text-base font-semibold text-[var(--text-primary)]">
             Hola, {user?.full_name?.split(' ')[0] ?? 'Usuario'}
           </p>
-          <p className="text-xs text-neutral-600">
+          <p className="text-xs text-[var(--text-secondary)]">
             {dayName}, {dateStr}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-primary-light flex items-center justify-center">
-            <span className="text-sm font-bold text-primary">{initials}</span>
+          <div className="w-8 h-8 rounded-full bg-[var(--accent-primary-subtle)] flex items-center justify-center">
+            <span className="text-sm font-bold text-[var(--accent-primary)]">{initials}</span>
           </div>
+          <ThemeToggle />
           <button
             onClick={() => navigate('/settings')}
             aria-label="Configuración"
-            className="p-2 text-neutral-400 hover:text-neutral-700 transition-colors"
+            className="p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <Settings size={18} />
           </button>
           <button
             onClick={logout}
             aria-label="Cerrar sesión"
-            className="p-2 text-neutral-400 hover:text-neutral-700 transition-colors"
+            className="p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
           >
             <LogOut size={18} />
           </button>
@@ -99,9 +101,9 @@ export function DashboardPage() {
           <DashboardSkeleton />
         ) : error ? (
           <div className="p-4">
-            <div className="flex items-center gap-3 p-4 bg-danger-light border-l-4 border-danger rounded-r-md">
-              <AlertCircle size={18} className="text-danger flex-shrink-0" />
-              <p className="text-sm text-neutral-900 flex-1">{error}</p>
+            <div className="flex items-center gap-3 p-4 bg-[var(--accent-danger-subtle)] border-l-[3px] border-[var(--accent-danger)] rounded-r-md">
+              <AlertCircle size={18} className="text-[var(--accent-danger)] flex-shrink-0" />
+              <p className="text-sm text-[var(--text-primary)] flex-1">{error}</p>
               <Button variant="secondary" size="sm" onClick={() => void refetch()}>
                 Reintentar
               </Button>

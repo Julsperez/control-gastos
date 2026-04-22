@@ -15,13 +15,13 @@ export function Card({
   className = '',
   ...props
 }: CardProps) {
-  const baseClass = 'bg-surface rounded-lg overflow-hidden'
+  const baseClass = 'overflow-hidden rounded-[18px]'
   const variantClass =
     variant === 'elevated'
-      ? 'shadow-md'
-      : 'border border-neutral-200'
+      ? 'glass-card'
+      : 'bg-[var(--bg-card)] border border-[var(--border-default)]'
   const interactiveClass = interactive
-    ? 'cursor-pointer hover:bg-neutral-100/50 active:bg-neutral-100 transition-colors duration-150'
+    ? 'glass-card-hover cursor-pointer transition-all duration-150'
     : ''
 
   return (
@@ -30,8 +30,8 @@ export function Card({
       {...props}
     >
       {header && (
-        <div className="px-4 py-3 border-b border-neutral-200">
-          <span className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">
+        <div className="px-4 py-3 border-b border-[var(--border-subtle)]">
+          <span className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wide">
             {header}
           </span>
         </div>

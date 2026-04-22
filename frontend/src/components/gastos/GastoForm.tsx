@@ -77,11 +77,11 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5 pb-4">
       {/* Campo Monto — prominente */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="gasto-monto" className="text-sm font-medium text-neutral-700">
+        <label htmlFor="gasto-monto" className="text-sm font-medium text-[var(--text-secondary)]">
           ¿Cuánto gastaste?
         </label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-2xl font-normal text-neutral-400 select-none">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-2xl font-normal text-[var(--text-tertiary)] select-none">
             $
           </span>
           <input
@@ -96,14 +96,14 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
             }}
             placeholder="0.00"
             className={[
-              'w-full h-16 pl-8 pr-4 text-2xl font-bold text-neutral-900 text-center bg-surface rounded-md border transition-all duration-150',
-              'focus:outline-none focus:ring-[3px] focus:border-primary focus:ring-primary/15',
-              amountError ? 'border-danger' : 'border-neutral-300',
+              'w-full h-16 pl-8 pr-4 text-2xl font-bold text-[var(--text-primary)] text-center bg-[var(--bg-input)] rounded-md border transition-all duration-150',
+              'focus:outline-none focus:ring-[3px] focus:border-[var(--border-focus)] focus:ring-[var(--accent-primary-glow)] focus:bg-[var(--bg-input-focus)]',
+              amountError ? 'border-[var(--border-error)]' : 'border-[var(--border-default)]',
             ].join(' ')}
           />
         </div>
         {amountError && (
-          <p role="alert" className="text-xs text-danger flex items-center gap-1">
+          <p role="alert" className="text-xs text-[var(--text-error)] flex items-center gap-1">
             <AlertCircle size={12} />
             {amountError}
           </p>
@@ -129,10 +129,10 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
       {/* Descripción — opcional */}
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <label htmlFor="gasto-desc" className="text-sm font-medium text-neutral-700">
+          <label htmlFor="gasto-desc" className="text-sm font-medium text-[var(--text-secondary)]">
             Descripción
           </label>
-          <span className="text-xs text-neutral-400">(opcional)</span>
+          <span className="text-xs text-[var(--text-tertiary)]">(opcional)</span>
         </div>
         <input
           id="gasto-desc"
@@ -143,9 +143,9 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
           }}
           placeholder="Ej: almuerzo con clientes, uber al aeropuerto…"
           maxLength={100}
-          className="w-full h-11 px-3 py-2.5 text-base text-neutral-900 bg-surface rounded-md border border-neutral-300 placeholder:text-neutral-400 focus:outline-none focus:ring-[3px] focus:border-primary focus:ring-primary/15 transition-all duration-150"
+          className="w-full h-11 px-3 py-2.5 text-base text-[var(--text-primary)] bg-[var(--bg-input)] rounded-md border border-[var(--border-default)] placeholder:text-[var(--text-disabled)] focus:outline-none focus:ring-[3px] focus:border-[var(--border-focus)] focus:ring-[var(--accent-primary-glow)] focus:bg-[var(--bg-input-focus)] transition-all duration-150"
         />
-        <span className="text-xs text-neutral-400 self-end">{description.length}/100</span>
+        <span className="text-xs text-[var(--text-tertiary)] self-end">{description.length}/100</span>
       </div>
 
       {/* Fecha */}
@@ -159,9 +159,9 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
 
       {/* Error de submit */}
       {submitError && (
-        <div className="flex items-start gap-2 p-3 bg-danger-light border-l-4 border-danger rounded-r-md">
-          <AlertCircle size={16} className="text-danger mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-neutral-900">{submitError}</p>
+        <div className="flex items-start gap-2 p-3 bg-[var(--accent-danger-subtle)] border-l-[3px] border-[var(--accent-danger)] rounded-r-md">
+          <AlertCircle size={16} className="text-[var(--accent-danger)] mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-[var(--text-primary)]">{submitError}</p>
         </div>
       )}
 

@@ -4,10 +4,167 @@
 @tailwind utilities;
 
 @layer base {
+  /* ==========================================================================
+     Light theme tokens (default / :root fallback)
+     Replican los valores Tailwind actuales para garantizar no-regresión visual
+     en light mode + refinamiento hacia paleta Apple HIG.
+     ========================================================================== */
+  :root,
+  [data-theme='light'] {
+    /* Fondos */
+    --bg-base: #f5f5f7;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f9f9fb;
+    --bg-input: #ffffff;
+    --bg-input-focus: #ffffff;
+    --bg-overlay: rgba(0, 0, 0, 0.45);
+    --bg-header: rgba(245, 245, 247, 0.9);
+    --bg-skeleton: #e5e7eb;
+    --bg-skeleton-highlight: #f3f4f6;
+    --bg-surface-auth: #ffffff;
+
+    /* Texto */
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #8e8e93;
+    --text-disabled: #bcbcc0;
+    --text-link: #0066cc;
+    --text-error: #c0392b;
+    --text-success: #1a7f4b;
+
+    /* Bordes */
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: rgba(0, 0, 0, 0.12);
+    --border-strong: rgba(0, 0, 0, 0.2);
+    --border-focus: #0066cc;
+    --border-error: #ef4444;
+    --border-success: #22c55e;
+
+    /* Acentos */
+    --accent-primary: #0066cc;
+    --accent-primary-hover: #0052a3;
+    --accent-primary-active: #004080;
+    --accent-primary-disabled: rgba(0, 102, 204, 0.35);
+    --accent-primary-subtle: rgba(0, 102, 204, 0.08);
+    --accent-primary-glow: rgba(0, 102, 204, 0.15);
+    --accent-success: #1a7f4b;
+    --accent-success-subtle: rgba(26, 127, 75, 0.08);
+    --accent-danger: #d93025;
+    --accent-danger-subtle: rgba(217, 48, 37, 0.08);
+    --accent-warning: #b45309;
+    --accent-warning-subtle: rgba(180, 83, 9, 0.08);
+
+    /* Texto sobre botón primary (blanco en light, negro en dark) */
+    --btn-primary-text: #ffffff;
+
+    /* Sombras */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-glow: none;
+    --shadow-fab: 0 4px 12px rgba(99, 102, 241, 0.35);
+    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-input-focus: 0 0 0 3px rgba(0, 102, 204, 0.15);
+    --shadow-toast: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  /* ==========================================================================
+     Dark theme tokens — identidad visual principal (iCloud-inspired)
+     ========================================================================== */
+  [data-theme='dark'] {
+    /* Fondos */
+    --bg-base: linear-gradient(
+      135deg,
+      #0f1b3d 0%,
+      #122044 35%,
+      #162650 65%,
+      #1a2a5e 100%
+    );
+    --bg-card: rgba(15, 27, 61, 0.85);
+    --bg-card-hover: rgba(15, 27, 61, 0.92);
+    --bg-input: rgba(10, 18, 45, 0.7);
+    --bg-input-focus: rgba(10, 18, 45, 0.9);
+    --bg-overlay: rgba(0, 0, 0, 0.65);
+    --bg-header: rgba(10, 18, 45, 0.9);
+    --bg-skeleton: rgba(255, 255, 255, 0.06);
+    --bg-skeleton-highlight: rgba(255, 255, 255, 0.1);
+    --bg-surface-auth: rgba(10, 18, 50, 0.95);
+
+    /* Texto */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --text-tertiary: rgba(255, 255, 255, 0.5);
+    --text-disabled: rgba(255, 255, 255, 0.25);
+    --text-link: #60c8ff;
+    --text-error: #ff8080;
+    --text-success: #6ee7b7;
+
+    /* Bordes */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-default: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --border-focus: rgba(0, 194, 255, 0.8);
+    --border-error: rgba(248, 113, 113, 0.8);
+    --border-success: rgba(110, 231, 183, 0.7);
+
+    /* Acentos */
+    --accent-primary: #00c2ff;
+    --accent-primary-hover: #33ceff;
+    --accent-primary-active: #00a8d9;
+    --accent-primary-disabled: rgba(0, 194, 255, 0.3);
+    --accent-primary-subtle: rgba(0, 194, 255, 0.1);
+    --accent-primary-glow: rgba(0, 194, 255, 0.2);
+    --accent-success: #34d399;
+    --accent-success-subtle: rgba(52, 211, 153, 0.15);
+    --accent-danger: #f87171;
+    --accent-danger-subtle: rgba(248, 113, 113, 0.15);
+    --accent-warning: #fcd34d;
+    --accent-warning-subtle: rgba(252, 211, 77, 0.12);
+
+    /* Texto sobre botón primary: negro porque cyan es luminoso (ratio 12.6:1) */
+    --btn-primary-text: #000000;
+
+    /* Sombras */
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(0, 194, 255, 0.15),
+      0 1px 0 rgba(255, 255, 255, 0.09) inset;
+    --shadow-glow: 0 0 20px rgba(0, 194, 255, 0.25);
+    --shadow-fab: 0 4px 12px rgba(0, 194, 255, 0.35),
+      0 0 20px rgba(0, 194, 255, 0.15);
+    --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.6),
+      0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    --shadow-input-focus: 0 0 0 3px rgba(0, 194, 255, 0.2);
+    --shadow-toast: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
   html {
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: var(--bg-base);
+    min-height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    color: var(--text-primary);
+  }
+
+  /* Transición suave entre temas. No se anima el background de html porque
+     los gradientes no interpolan bien y producen artefactos. */
+  body,
+  [data-theme] * {
+    transition: background-color 200ms ease, color 200ms ease,
+      border-color 200ms ease, box-shadow 200ms ease, fill 200ms ease;
+  }
+
+  /* Respetar prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    body,
+    [data-theme] * {
+      transition: none;
+    }
   }
 
   *,
@@ -19,6 +176,72 @@
   /* Cifras tabulares en toda la app para alinear montos */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* ==========================================================================
+     .glass-card — efecto glassmorphism para Card, BudgetWidget, GastosList
+     En dark: blur real sobre gradiente azul. En light: card blanco con sombra.
+     Fallback: cuando backdrop-filter no está soportado, se usa mayor opacidad.
+     ========================================================================== */
+  .glass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+  }
+
+  @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
+    [data-theme='dark'] .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+
+  @supports not ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))) {
+    [data-theme='dark'] .glass-card {
+      background: rgba(10, 16, 40, 0.97);
+    }
+  }
+
+  .glass-card-hover:hover {
+    background: var(--bg-card-hover);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Modal y BottomSheet: glassmorphism más pronunciado (están en primer plano) */
+  .glass-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-modal);
+  }
+
+  @supports (backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px)) {
+    [data-theme='dark'] .glass-modal {
+      background: rgba(10, 20, 50, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+  }
+
+  @supports not ((backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px))) {
+    [data-theme='dark'] .glass-modal {
+      background: rgba(10, 16, 40, 0.98);
+    }
+  }
+
+  /* Header sticky con blur más ligero (8px) para no sobrecargar GPU en scroll */
+  .glass-header {
+    background: var(--bg-header);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  @supports (backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px)) {
+    .glass-header {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 }
 

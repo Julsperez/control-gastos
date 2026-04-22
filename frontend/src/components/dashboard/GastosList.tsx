@@ -63,17 +63,17 @@ export function GastosList() {
   const hasMore = gastos.length > PREVIEW_COUNT
 
   return (
-    <div className="bg-surface rounded-lg border border-neutral-200 overflow-hidden">
+    <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border-default)] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100">
-        <span className="text-sm font-semibold uppercase tracking-wide text-neutral-700">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)]">
+        <span className="text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
           Recientes
         </span>
         <select
           value={mesActual}
           onChange={(e) => void handleMonthChange(e.target.value)}
           disabled={loadingMonths}
-          className="text-xs text-neutral-600 border border-neutral-200 rounded-md px-2 py-1 bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 cursor-pointer"
+          className="text-xs text-[var(--text-secondary)] border border-[var(--border-default)] rounded-md px-2 py-1 bg-[var(--bg-input)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary-glow)] disabled:opacity-50 cursor-pointer"
         >
           {[...new Set([mesActual, ...availableMonths])].map((m) => (
             <option key={m} value={m}>
@@ -88,11 +88,11 @@ export function GastosList() {
         {loadingGastos ? (
           <div className="py-4 flex flex-col gap-3">
             {Array.from({ length: PREVIEW_COUNT }).map((_, i) => (
-              <div key={i} className="h-10 bg-neutral-100 rounded animate-pulse" />
+              <div key={i} className="h-10 bg-[var(--bg-skeleton)] rounded animate-pulse" />
             ))}
           </div>
         ) : gastos.length === 0 ? (
-          <p className="text-sm text-neutral-500 text-center py-6">
+          <p className="text-sm text-[var(--text-tertiary)] text-center py-6">
             No hay gastos en este período
           </p>
         ) : (
@@ -106,7 +106,7 @@ export function GastosList() {
             {hasMore && (
               <button
                 onClick={() => setExpanded((v) => !v)}
-                className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-primary hover:text-primary/80 transition-colors border-t border-neutral-100"
+                className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-[var(--accent-primary)] hover:opacity-80 transition-opacity border-t border-[var(--border-subtle)]"
               >
                 {expanded ? (
                   <>

@@ -38,6 +38,48 @@ const config: Config = {
         },
         background: '#F8FAFC',
         surface: '#FFFFFF',
+        // Tokens semánticos (CSS custom properties) — responden a [data-theme]
+        // Fondos
+        'bg-base': 'var(--bg-base)',
+        'bg-card': 'var(--bg-card)',
+        'bg-card-hover': 'var(--bg-card-hover)',
+        'bg-input': 'var(--bg-input)',
+        'bg-input-focus': 'var(--bg-input-focus)',
+        'bg-overlay': 'var(--bg-overlay)',
+        'bg-header': 'var(--bg-header)',
+        'bg-skeleton': 'var(--bg-skeleton)',
+        'bg-skeleton-highlight': 'var(--bg-skeleton-highlight)',
+        'bg-surface-auth': 'var(--bg-surface-auth)',
+        // Texto
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-tertiary': 'var(--text-tertiary)',
+        'text-disabled': 'var(--text-disabled)',
+        'text-link': 'var(--text-link)',
+        'text-error': 'var(--text-error)',
+        'text-success': 'var(--text-success)',
+        // Bordes
+        'border-subtle': 'var(--border-subtle)',
+        'border-default': 'var(--border-default)',
+        'border-strong': 'var(--border-strong)',
+        'border-focus': 'var(--border-focus)',
+        'border-error': 'var(--border-error)',
+        'border-success': 'var(--border-success)',
+        // Acentos
+        'accent-primary': 'var(--accent-primary)',
+        'accent-primary-hover': 'var(--accent-primary-hover)',
+        'accent-primary-active': 'var(--accent-primary-active)',
+        'accent-primary-disabled': 'var(--accent-primary-disabled)',
+        'accent-primary-subtle': 'var(--accent-primary-subtle)',
+        'accent-primary-glow': 'var(--accent-primary-glow)',
+        'accent-success': 'var(--accent-success)',
+        'accent-success-subtle': 'var(--accent-success-subtle)',
+        'accent-danger': 'var(--accent-danger)',
+        'accent-danger-subtle': 'var(--accent-danger-subtle)',
+        'accent-warning': 'var(--accent-warning)',
+        'accent-warning-subtle': 'var(--accent-warning-subtle)',
+        // Botón primary — texto condicional por tema (blanco/negro)
+        'btn-primary-text': 'var(--btn-primary-text)',
         // Colores de categorías (fuente de verdad: design-system.md)
         cat: {
           alimentacion: '#F97316',
@@ -93,6 +135,14 @@ const config: Config = {
         md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
         lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
         fab: '0 4px 12px rgba(99, 102, 241, 0.4)',
+        // Sombras tokenizadas (CSS custom properties)
+        card: 'var(--shadow-card)',
+        'card-hover': 'var(--shadow-card-hover)',
+        glow: 'var(--shadow-glow)',
+        'fab-themed': 'var(--shadow-fab)',
+        modal: 'var(--shadow-modal)',
+        'input-focus': 'var(--shadow-input-focus)',
+        toast: 'var(--shadow-toast)',
       },
       transitionTimingFunction: {
         spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',

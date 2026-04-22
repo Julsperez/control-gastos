@@ -125,7 +125,7 @@ export function RegisterForm() {
           disabled={isLoading}
         />
         {emailTakenError && (
-          <p className="text-xs text-danger mt-1">
+          <p className="text-xs text-[var(--text-error)] mt-1">
             Este email ya está registrado.{' '}
             <Link to="/login" className="underline font-medium">
               iniciar sesión
@@ -172,9 +172,9 @@ export function RegisterForm() {
         {isLoading ? 'Creando cuenta…' : 'Crear cuenta'}
       </Button>
 
-      <p className="text-center text-sm text-neutral-600">
+      <p className="text-center text-sm text-[var(--text-secondary)]">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-primary font-medium hover:underline">
+        <Link to="/login" className="text-[var(--accent-primary)] font-medium hover:underline">
           Iniciar sesión
         </Link>
       </p>

@@ -9,7 +9,8 @@ import {
 } from 'recharts'
 import { Card } from '../ui/Card'
 import type { TotalPorCategoria } from '../../types'
-import { formatCurrency } from '../../types'
+import { formatCurrency, SYSTEM_CATEGORIES_DARK } from '../../types'
+import { useTheme } from '../../hooks/useTheme'
 
 interface GraficoBarrasProps {
   data: TotalPorCategoria[]
@@ -23,33 +24,64 @@ interface TooltipPayloadItem {
 function CustomTooltip({
   active,
   payload,
+  theme,
 }: {
   active?: boolean
   payload?: TooltipPayloadItem[]
+  theme: 'dark' | 'light'
 }) {
   if (!active || !payload?.length) return null
   const item = payload[0]
+  const isDark = theme === 'dark'
   return (
-    <div className="bg-surface border border-neutral-200 rounded-lg shadow-md px-3 py-2 text-sm">
-      <p className="font-semibold text-neutral-900">{item.payload.categoria_name}</p>
-      <p className="text-neutral-600">{formatCurrency(item.value)}</p>
-      <p className="text-neutral-400 text-xs">{item.payload.porcentaje.toFixed(1)}%</p>
+    <div
+      className="rounded-lg px-3 py-2 text-sm"
+      style={{
+        background: isDark ? 'rgba(10,20,50,0.95)' : 'var(--bg-card)',
+        backdropFilter: isDark ? 'blur(16px)' : undefined,
+        WebkitBackdropFilter: isDark ? 'blur(16px)' : undefined,
+        border: '1px solid var(--border-default)',
+        boxShadow: 'var(--shadow-card)',
+      }}
+    >
+      <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+        {item.payload.categoria_name}
+      </p>
+      <p style={{ color: 'var(--text-secondary)' }}>{formatCurrency(item.value)}</p>
+      <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+        {item.payload.porcentaje.toFixed(1)}%
+      </p>
     </div>
   )
 }
 
 export function GraficoBarras({ data }: GraficoBarrasProps) {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+
   if (data.length === 0) return null
 
-  // Si hay solo una categoría, mostrar texto en lugar del gráfico
+  const labelColor = isDark ? 'rgba(255,255,255,0.65)' : '#374151'
+  const cursorColor = isDark ? 'rgba(0,194,255,0.06)' : 'rgba(99,102,241,0.05)'
+
+  const getBarColor = (entry: TotalPorCategoria) => {
+    if (isDark) {
+      return SYSTEM_CATEGORIES_DARK[entry.categoria_id] ?? entry.categoria_color
+    }
+    return entry.categoria_color
+  }
+
   if (data.length === 1) {
     const cat = data[0]
     return (
       <Card variant="elevated">
-        <p className="text-sm font-semibold uppercase tracking-wide text-neutral-700 mb-3">
+        <p
+          className="text-sm font-semibold uppercase tracking-wide mb-3"
+          style={{ color: 'var(--text-secondary)' }}
+        >
           Por categoría
         </p>
-        <p className="text-base font-medium" style={{ color: cat.categoria_color }}>
+        <p className="text-base font-medium" style={{ color: getBarColor(cat) }}>
           {cat.categoria_name} · 100% del gasto del mes
         </p>
       </Card>
@@ -58,7 +90,10 @@ export function GraficoBarras({ data }: GraficoBarrasProps) {
 
   return (
     <Card variant="elevated">
-      <p className="text-sm font-semibold uppercase tracking-wide text-neutral-700 mb-4">
+      <p
+        className="text-sm font-semibold uppercase tracking-wide mb-4"
+        style={{ color: 'var(--text-secondary)' }}
+      >
         Por categoría
       </p>
       <ResponsiveContainer width="100%" height={data.length * 40 + 20}>
@@ -72,14 +107,17 @@ export function GraficoBarras({ data }: GraficoBarrasProps) {
             type="category"
             dataKey="categoria_name"
             width={90}
-            tick={{ fontSize: 12, fill: '#374151' }}
+            tick={{ fontSize: 12, fill: labelColor }}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(99,102,241,0.05)' }} />
+          <Tooltip
+            content={<CustomTooltip theme={theme} />}
+            cursor={{ fill: cursorColor }}
+          />
           <Bar dataKey="total" radius={[0, 6, 6, 0]} barSize={12}>
             {data.map((entry) => (
-              <Cell key={entry.categoria_id} fill={entry.categoria_color} />
+              <Cell key={entry.categoria_id} fill={getBarColor(entry)} />
             ))}
           </Bar>
         </BarChart>

@@ -13,13 +13,13 @@ export function FAB({ isOpen, onClick }: FABProps) {
       className={[
         'fixed bottom-6 right-4 z-50',
         'w-14 h-14 rounded-full',
-        'bg-primary text-white',
-        'shadow-fab',
+        'bg-[var(--accent-primary)] text-[var(--btn-primary-text)]',
+        'shadow-[var(--shadow-fab)]',
         'flex items-center justify-center',
         'transition-all duration-150 ease-out',
-        'hover:bg-primary-dark hover:scale-105',
+        'hover:bg-[var(--accent-primary-hover)] hover:scale-105',
         'active:scale-[0.97]',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-card)]',
         'animate-fab-appear',
       ].join(' ')}
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}

@@ -74,7 +74,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
     <div className="fixed inset-0 z-40">
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/50 animate-fade-in"
+        className="absolute inset-0 bg-[var(--bg-overlay)] animate-fade-in"
         onClick={onClose}
         aria-hidden
       />
@@ -86,7 +86,7 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
         aria-labelledby="sheet-title"
         className={[
           'absolute bottom-0 left-0 right-0 z-50',
-          'bg-surface rounded-t-xl shadow-lg',
+          'glass-modal rounded-t-[20px]',
           'max-h-[90vh] overflow-y-auto',
           'animate-sheet-up',
         ].join(' ')}
@@ -94,17 +94,17 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-4">
-          <div className="w-8 h-1 bg-neutral-300 rounded-full" />
+          <div className="w-8 h-1 bg-[var(--border-strong)] rounded-full" />
         </div>
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pb-4 border-b border-neutral-200">
-          <h2 id="sheet-title" className="text-xl font-bold text-neutral-900">
+        <div className="flex items-center justify-between px-4 pb-4 border-b border-[var(--border-subtle)]">
+          <h2 id="sheet-title" className="text-xl font-bold text-[var(--text-primary)]">
             {title}
           </h2>
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-colors"
+            className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--accent-primary-subtle)] rounded-md transition-colors"
           >
             <X size={20} />
           </button>

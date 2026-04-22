@@ -13,13 +13,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-primary text-white hover:bg-primary-dark active:bg-[#4338CA] disabled:bg-[#A5B4FC] shadow-sm hover:shadow-md',
+    'bg-[var(--accent-primary)] text-[var(--btn-primary-text)] hover:bg-[var(--accent-primary-hover)] active:bg-[var(--accent-primary-active)] disabled:bg-[var(--accent-primary-disabled)] disabled:text-[var(--text-disabled)] shadow-sm hover:shadow-[var(--shadow-glow)]',
   secondary:
-    'bg-surface text-primary border border-primary hover:bg-primary-light active:bg-[#E0E7FF] disabled:bg-neutral-100 disabled:text-neutral-400 disabled:border-neutral-300 shadow-sm',
+    'bg-transparent text-[var(--accent-primary)] border border-[var(--accent-primary)] hover:bg-[var(--accent-primary-subtle)] active:bg-[var(--accent-primary-subtle)] disabled:text-[var(--text-disabled)] disabled:border-[var(--border-subtle)]',
   danger:
-    'bg-danger text-white hover:bg-[#DC2626] active:bg-[#B91C1C] disabled:bg-[#FCA5A5] shadow-sm hover:shadow-md',
+    'bg-[var(--accent-danger)] text-[var(--btn-primary-text)] hover:brightness-110 active:brightness-95 disabled:opacity-50 shadow-sm',
   ghost:
-    'bg-transparent text-neutral-600 hover:bg-neutral-100 active:bg-neutral-200 disabled:text-neutral-300',
+    'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--accent-primary-subtle)] hover:text-[var(--text-primary)] active:bg-[var(--accent-primary-subtle)] disabled:text-[var(--text-disabled)]',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -51,7 +51,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         aria-disabled={isDisabled}
         className={[
           'relative inline-flex items-center justify-center gap-2 transition-all duration-150 ease-out',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-card)]',
           'disabled:cursor-not-allowed',
           variantClasses[variant],
           sizeClasses[size],

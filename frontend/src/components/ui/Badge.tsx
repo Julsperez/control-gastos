@@ -1,5 +1,6 @@
 import type { Categoria } from '../../types'
-import { getCategoryBadgeStyle } from '../../types'
+import { getCategoryBadgeStyle, getCategoryColor } from '../../types'
+import { useTheme } from '../../hooks/useTheme'
 
 interface BadgeProps {
   categoria: Categoria
@@ -7,7 +8,9 @@ interface BadgeProps {
 }
 
 export function Badge({ categoria, size = 'sm' }: BadgeProps) {
-  const style = getCategoryBadgeStyle(categoria.name)
+  const { theme } = useTheme()
+  const style = getCategoryBadgeStyle(categoria.name, theme)
+  const dotColor = getCategoryColor(categoria, theme)
 
   if (size === 'md') {
     return (
@@ -16,12 +19,12 @@ export function Badge({ categoria, size = 'sm' }: BadgeProps) {
         style={{
           backgroundColor: style.bg,
           color: style.text,
-          borderColor: categoria.color + '40',
+          borderColor: dotColor + '40',
         }}
       >
         <span
           className="inline-block w-2 h-2 rounded-full flex-shrink-0"
-          style={{ backgroundColor: categoria.color }}
+          style={{ backgroundColor: dotColor }}
         />
         {categoria.name}
       </span>
@@ -35,7 +38,7 @@ export function Badge({ categoria, size = 'sm' }: BadgeProps) {
     >
       <span
         className="inline-block w-2 h-2 rounded-full flex-shrink-0"
-        style={{ backgroundColor: categoria.color }}
+        style={{ backgroundColor: dotColor }}
       />
       {categoria.name}
     </span>

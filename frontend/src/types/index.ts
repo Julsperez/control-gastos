@@ -162,7 +162,28 @@ export const SYSTEM_CATEGORIES: Categoria[] = [
   { id: 10, name: 'Otros',        color: '#6B7280', icon: 'more-horizontal', is_custom: false },
 ]
 
-// Badge backgrounds por nombre de categoría
+// Colores optimizados para dark theme (mayor luminancia, cumplen AA sobre bg azul marino)
+export const SYSTEM_CATEGORIES_DARK: Record<number, string> = {
+  1:  '#FB923C', // Alimentación — orange-400
+  2:  '#60A5FA', // Transporte   — blue-400
+  3:  '#FBBF24', // Hogar        — amber-400
+  4:  '#34D399', // Salud        — emerald-400
+  5:  '#C084FC', // Ocio         — purple-400
+  6:  '#2DD4BF', // Ropa         — teal-400
+  7:  '#818CF8', // Educación    — indigo-400
+  8:  '#94A3B8', // Servicios    — slate-400
+  9:  '#38BDF8', // Viajes       — sky-400
+  10: '#9CA3AF', // Otros        — gray-400
+}
+
+export function getCategoryColor(categoria: Categoria, theme: 'dark' | 'light' = 'light'): string {
+  if (theme === 'dark' && !categoria.is_custom) {
+    return SYSTEM_CATEGORIES_DARK[categoria.id] ?? categoria.color
+  }
+  return categoria.color
+}
+
+// Badge backgrounds por nombre de categoría (light theme)
 export const CATEGORY_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
   'Alimentación': { bg: '#FFF7ED', text: '#C2410C' },
   'Transporte':   { bg: '#EFF6FF', text: '#1D4ED8' },
@@ -176,8 +197,29 @@ export const CATEGORY_BADGE_STYLES: Record<string, { bg: string; text: string }>
   'Otros':        { bg: '#F8FAFC', text: '#334155' },
 }
 
-export function getCategoryBadgeStyle(name: string): { bg: string; text: string } {
-  return CATEGORY_BADGE_STYLES[name] ?? { bg: '#F3F4F6', text: '#374151' }
+// Badge backgrounds dark theme (transparencias sobre bg azul marino)
+export const CATEGORY_BADGE_STYLES_DARK: Record<string, { bg: string; text: string }> = {
+  'Alimentación': { bg: 'rgba(251,146,60,0.15)',  text: '#FDBA74' },
+  'Transporte':   { bg: 'rgba(96,165,250,0.15)',  text: '#93C5FD' },
+  'Hogar':        { bg: 'rgba(251,191,36,0.15)',  text: '#FCD34D' },
+  'Salud':        { bg: 'rgba(52,211,153,0.15)',  text: '#6EE7B7' },
+  'Ocio':         { bg: 'rgba(192,132,252,0.15)', text: '#D8B4FE' },
+  'Ropa':         { bg: 'rgba(45,212,191,0.15)',  text: '#5EEAD4' },
+  'Educación':    { bg: 'rgba(129,140,248,0.15)', text: '#A5B4FC' },
+  'Servicios':    { bg: 'rgba(148,163,184,0.15)', text: '#CBD5E1' },
+  'Viajes':       { bg: 'rgba(56,189,248,0.15)',  text: '#7DD3FC' },
+  'Otros':        { bg: 'rgba(156,163,175,0.15)', text: '#D1D5DB' },
+}
+
+export function getCategoryBadgeStyle(
+  name: string,
+  theme: 'dark' | 'light' = 'light',
+): { bg: string; text: string } {
+  const source = theme === 'dark' ? CATEGORY_BADGE_STYLES_DARK : CATEGORY_BADGE_STYLES
+  const fallback = theme === 'dark'
+    ? { bg: 'rgba(255,255,255,0.06)', text: 'rgba(255,255,255,0.65)' }
+    : { bg: '#F3F4F6', text: '#374151' }
+  return source[name] ?? fallback
 }
 
 // Formateo de moneda

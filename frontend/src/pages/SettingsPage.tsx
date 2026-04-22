@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import { ThemeToggle } from '../components/ui/ThemeToggle'
 import { useBudget } from '../hooks/useBudget'
 
 export function SettingsPage() {
@@ -56,25 +57,26 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 bg-surface border-b border-neutral-200 h-14 flex items-center px-4 gap-3">
+    <div className="min-h-screen">
+      <header className="glass-header sticky top-0 z-30 h-14 flex items-center px-4 gap-3">
         <button
           onClick={() => navigate('/')}
-          className="p-1.5 text-neutral-500 hover:text-neutral-800 transition-colors"
+          className="p-1.5 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
           aria-label="Volver al dashboard"
         >
           <ArrowLeft size={18} />
         </button>
-        <h1 className="text-base font-semibold text-neutral-900">Configuración</h1>
+        <h1 className="text-base font-semibold text-[var(--text-primary)] flex-1">Configuración</h1>
+        <ThemeToggle />
       </header>
 
       <main className="max-w-lg mx-auto p-6">
         <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-6">
-          <section className="bg-surface rounded-xl border border-neutral-200 p-5 flex flex-col gap-4">
-            <h2 className="text-sm font-semibold text-neutral-700">Presupuesto mensual</h2>
+          <section className="glass-card rounded-xl p-5 flex flex-col gap-4">
+            <h2 className="text-sm font-semibold text-[var(--text-secondary)]">Presupuesto mensual</h2>
 
             <div>
-              <label className="block text-sm text-neutral-600 mb-1">
+              <label className="block text-sm text-[var(--text-secondary)] mb-1">
                 Monto del presupuesto mensual
               </label>
               <Input
@@ -86,12 +88,12 @@ export function SettingsPage() {
                 onChange={(e) => setBudget(e.target.value)}
                 validationState={errors.budget ? 'error' : null}
               />
-              {errors.budget && <p className="text-xs text-red-600 mt-1">{errors.budget}</p>}
-              <p className="text-xs text-neutral-400 mt-1">Dejá vacío para no tener presupuesto</p>
+              {errors.budget && <p className="text-xs text-[var(--text-error)] mt-1">{errors.budget}</p>}
+              <p className="text-xs text-[var(--text-tertiary)] mt-1">Dejá vacío para no tener presupuesto</p>
             </div>
 
             <div>
-              <label className="block text-sm text-neutral-600 mb-1">
+              <label className="block text-sm text-[var(--text-secondary)] mb-1">
                 Umbral de advertencia (%)
               </label>
               <Input
@@ -102,11 +104,11 @@ export function SettingsPage() {
                 onChange={(e) => setWarning(e.target.value)}
                 validationState={errors.warning ? 'error' : null}
               />
-              {errors.warning && <p className="text-xs text-red-600 mt-1">{errors.warning}</p>}
+              {errors.warning && <p className="text-xs text-[var(--text-error)] mt-1">{errors.warning}</p>}
             </div>
 
             <div>
-              <label className="block text-sm text-neutral-600 mb-1">
+              <label className="block text-sm text-[var(--text-secondary)] mb-1">
                 Umbral crítico (%)
               </label>
               <Input
@@ -117,7 +119,7 @@ export function SettingsPage() {
                 onChange={(e) => setCritical(e.target.value)}
                 validationState={errors.critical ? 'error' : null}
               />
-              {errors.critical && <p className="text-xs text-red-600 mt-1">{errors.critical}</p>}
+              {errors.critical && <p className="text-xs text-[var(--text-error)] mt-1">{errors.critical}</p>}
             </div>
           </section>
 

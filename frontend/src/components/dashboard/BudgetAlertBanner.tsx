@@ -9,19 +9,19 @@ interface Props {
 
 const config = {
   warning: {
-    bg: 'bg-yellow-50 border-yellow-300',
-    text: 'text-yellow-800',
-    icon: <AlertTriangle size={16} className="text-yellow-600 shrink-0" />,
+    classes:
+      'bg-[var(--accent-warning-subtle)] border-l-[3px] border-[var(--accent-warning)] text-[var(--accent-warning)]',
+    icon: <AlertTriangle size={16} className="text-[var(--accent-warning)] shrink-0" />,
   },
   critical: {
-    bg: 'bg-red-50 border-red-300',
-    text: 'text-red-800',
-    icon: <AlertOctagon size={16} className="text-red-600 shrink-0" />,
+    classes:
+      'bg-[var(--accent-danger-subtle)] border-l-[3px] border-[var(--accent-danger)] text-[var(--accent-danger)]',
+    icon: <AlertOctagon size={16} className="text-[var(--accent-danger)] shrink-0" />,
   },
   exceeded: {
-    bg: 'bg-red-100 border-red-400',
-    text: 'text-red-900',
-    icon: <XCircle size={16} className="text-red-700 shrink-0" />,
+    classes:
+      'bg-[var(--accent-danger-subtle)] border-l-[3px] border-[var(--accent-danger)] text-[var(--accent-danger)]',
+    icon: <XCircle size={16} className="text-[var(--accent-danger)] shrink-0" />,
   },
 }
 
@@ -41,15 +41,15 @@ export function BudgetAlertBanner({ status }: Props) {
 
   if (dismissed || status.alert_level === 'none') return null
 
-  const { bg, text, icon } = config[status.alert_level as keyof typeof config]
+  const { classes, icon } = config[status.alert_level as keyof typeof config]
 
   return (
-    <div className={`flex items-center gap-3 px-4 py-2.5 border-b ${bg}`}>
+    <div className={`flex items-center gap-3 px-4 py-2.5 ${classes}`}>
       {icon}
-      <p className={`text-sm flex-1 font-medium ${text}`}>{getMessage(status)}</p>
+      <p className="text-sm flex-1 font-medium">{getMessage(status)}</p>
       <button
         onClick={() => setDismissed(true)}
-        className={`${text} opacity-60 hover:opacity-100 transition-opacity`}
+        className="opacity-60 hover:opacity-100 transition-opacity"
         aria-label="Cerrar alerta"
       >
         <X size={14} />

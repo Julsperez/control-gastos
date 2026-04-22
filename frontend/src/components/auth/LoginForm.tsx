@@ -48,7 +48,7 @@ export function LoginForm() {
           disabled={isLoading}
         />
         <div className="flex justify-end">
-          <span className="text-sm text-primary cursor-not-allowed opacity-60">
+          <span className="text-sm text-[var(--accent-primary)] cursor-not-allowed opacity-60">
             ¿Olvidaste tu contraseña?
           </span>
         </div>
@@ -58,10 +58,10 @@ export function LoginForm() {
       {error && (
         <div
           role="alert"
-          className="flex items-start gap-2 p-3 bg-danger-light border-l-4 border-danger rounded-r-md animate-fade-in"
+          className="flex items-start gap-2 p-3 bg-[var(--accent-danger-subtle)] border-l-[3px] border-[var(--accent-danger)] rounded-r-md animate-fade-in"
         >
-          <AlertCircle size={16} className="text-danger mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-neutral-900">{error}</p>
+          <AlertCircle size={16} className="text-[var(--accent-danger)] mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-[var(--text-primary)]">{error}</p>
         </div>
       )}
 
@@ -69,9 +69,9 @@ export function LoginForm() {
         {isLoading ? 'Verificando…' : 'Iniciar sesión'}
       </Button>
 
-      <p className="text-center text-sm text-neutral-600">
+      <p className="text-center text-sm text-[var(--text-secondary)]">
         ¿No tienes cuenta?{' '}
-        <Link to="/register" className="text-primary font-medium hover:underline">
+        <Link to="/register" className="text-[var(--accent-primary)] font-medium hover:underline">
           Regístrate
         </Link>
       </p>

@@ -5,7 +5,7 @@ interface SkeletonProps {
 function SkeletonBlock({ className = '' }: SkeletonProps) {
   return (
     <div
-      className={['bg-neutral-200 rounded animate-skeleton-pulse', className].join(' ')}
+      className={['bg-[var(--bg-skeleton)] rounded animate-skeleton-pulse', className].join(' ')}
       aria-hidden
     />
   )

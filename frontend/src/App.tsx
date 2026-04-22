@@ -14,13 +14,13 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
 function Footer() {
   return (
-    <footer className="py-4 text-center text-xs text-neutral-400">
+    <footer className="py-4 text-center text-xs text-[var(--text-tertiary)]">
       Coded with love by{' '}
       <a
         href="https://github.com/Julsperez"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-primary font-medium hover:underline"
+        className="text-[var(--accent-primary)] font-medium hover:underline"
       >
         Julsperez
       </a>

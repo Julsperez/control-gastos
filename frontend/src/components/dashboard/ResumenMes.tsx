@@ -26,16 +26,16 @@ export function ResumenMes({
 
   return (
     <Card variant="elevated">
-      <p className="text-xs font-medium uppercase tracking-wide text-neutral-600 mb-1">
+      <p className="text-xs font-medium uppercase tracking-wide text-[var(--text-secondary)] mb-1">
         Total gastado en {mesNombre}
       </p>
-      <p className="text-3xl font-bold text-neutral-900 tabular-nums">
+      <p className="text-3xl font-bold text-[var(--text-primary)] tabular-nums">
         {formatCurrency(totalMes)}
       </p>
       {variacionPorcentual !== null && totalMesAnterior !== null && (
         <div
           className={`flex items-center gap-1 mt-1 text-sm font-medium ${
-            subio ? 'text-danger' : 'text-success'
+            subio ? 'text-[var(--accent-danger)]' : 'text-[var(--accent-success)]'
           }`}
         >
           {subio ? <TrendingUp size={14} /> : <TrendingDown size={14} />}

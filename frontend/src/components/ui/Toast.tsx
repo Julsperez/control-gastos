@@ -14,9 +14,9 @@ const iconMap = {
 }
 
 const colorMap = {
-  success: 'bg-success text-white',
-  error: 'bg-danger text-white',
-  warning: 'bg-warning text-white',
+  success: 'bg-[var(--accent-success)] text-[var(--btn-primary-text)]',
+  error: 'bg-[var(--accent-danger)] text-[var(--btn-primary-text)]',
+  warning: 'bg-[var(--accent-warning)] text-[var(--btn-primary-text)]',
 }
 
 function ToastItem({ toast }: ToastItemProps) {
@@ -33,7 +33,7 @@ function ToastItem({ toast }: ToastItemProps) {
       role="alert"
       aria-live="polite"
       className={[
-        'flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg',
+        'flex items-center gap-2 px-4 py-3 rounded-lg shadow-[var(--shadow-toast)]',
         'text-sm font-medium',
         'animate-slide-down',
         colorMap[toast.type],

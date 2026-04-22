@@ -18,22 +18,22 @@ function formatFecha(fechaStr: string): string {
 
 export function GastoItem({ gasto, onDelete }: GastoItemProps) {
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-neutral-100 last:border-0 group">
+    <div className="flex items-center gap-3 py-3 border-b border-[var(--border-subtle)] last:border-0 group">
       <Badge categoria={gasto.categoria} />
       <div className="flex-1 min-w-0">
-        <p className="text-base font-medium text-neutral-900 truncate">
+        <p className="text-base font-medium text-[var(--text-primary)] truncate">
           {gasto.description ?? gasto.categoria.name}
         </p>
-        <p className="text-xs text-neutral-600">{formatFecha(gasto.fecha)}</p>
+        <p className="text-xs text-[var(--text-tertiary)]">{formatFecha(gasto.fecha)}</p>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-base font-semibold text-neutral-900 tabular-nums whitespace-nowrap">
+        <span className="text-base font-semibold text-[var(--text-primary)] tabular-nums whitespace-nowrap">
           {formatCurrency(gasto.amount)}
         </span>
         <button
           onClick={() => onDelete(gasto.id)}
           aria-label={`Eliminar gasto ${gasto.description ?? gasto.categoria.name}`}
-          className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 text-neutral-400 hover:text-danger transition-all duration-150 rounded"
+          className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 text-[var(--text-tertiary)] hover:text-[var(--accent-danger)] transition-all duration-150 rounded"
         >
           <Trash2 size={14} />
         </button>
