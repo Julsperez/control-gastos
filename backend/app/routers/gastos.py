@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import Session, joinedload
 
 from app.dependencies import get_current_user, get_db
@@ -28,7 +28,7 @@ def list_gastos(
         .options(joinedload(Gasto.categoria))
         .filter(
             Gasto.user_id == current_user.id,
-            func.strftime("%Y-%m", Gasto.fecha) == mes,
+            func.to_char(Gasto.fecha, "YYYY-MM") == mes,
         )
     )
     if categoria_id is not None:
@@ -74,11 +74,12 @@ def get_available_months(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    mes_col = func.to_char(Gasto.fecha, "YYYY-MM").label("mes")
     rows = (
-        db.query(func.strftime("%Y-%m", Gasto.fecha))
+        db.query(mes_col)
         .filter(Gasto.user_id == current_user.id)
         .distinct()
-        .order_by(func.strftime("%Y-%m", Gasto.fecha).desc())
+        .order_by(text("mes DESC"))
         .all()
     )
     return [r[0] for r in rows]

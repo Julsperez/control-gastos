@@ -37,7 +37,7 @@ def get_resumen(
             .options(joinedload(Gasto.categoria))  # evita N+1
             .filter(
                 Gasto.user_id == current_user.id,
-                func.strftime("%Y-%m", Gasto.fecha) == target_mes,
+                func.to_char(Gasto.fecha, "YYYY-MM") == target_mes,
             )
             .all()
         )

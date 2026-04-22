@@ -8,10 +8,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - sqlite_data:/data
       - ./backend:/app  # hot-reload en desarrollo — remover en prod
     environment:
-      - DATABASE_URL=sqlite:////data/gastos.db
+      - DATABASE_URL=${DATABASE_URL}
       - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-15}
       - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
@@ -38,7 +37,3 @@ services:
       backend:
         condition: service_healthy
     restart: unless-stopped
-
-volumes:
-  sqlite_data:
-    name: control_gastos_sqlite

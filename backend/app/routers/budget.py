@@ -54,7 +54,7 @@ def _spent_for_month(user_id: int, mes: str, db: Session) -> float:
         db.query(func.sum(Gasto.amount))
         .filter(
             Gasto.user_id == user_id,
-            func.strftime("%Y-%m", Gasto.fecha) == mes,
+            func.to_char(Gasto.fecha, "YYYY-MM") == mes,
         )
         .scalar()
     )

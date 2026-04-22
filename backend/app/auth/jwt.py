@@ -11,7 +11,7 @@ ALGORITHM = "HS256"
 
 
 def _utcnow() -> datetime:
-    """Retorna el tiempo actual en UTC naive (para consistencia con SQLite)."""
+    """Retorna el tiempo actual en UTC naive. Postgres TIMESTAMP almacena sin tz."""
     return datetime.utcnow()
 
 
