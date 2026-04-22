@@ -31,7 +31,7 @@ function Footer() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ToastProvider>
         <div className="flex flex-col min-h-screen">
           <div className="flex-1">

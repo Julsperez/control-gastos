@@ -80,7 +80,7 @@ export class ApiGastosService implements IGastosService {
           } catch {
             // Logout: limpiar store y redirigir
             useAuthStore.getState().clearAuth()
-            window.location.href = '/login'
+            window.location.href = import.meta.env.BASE_URL + 'login'
             throw error
           } finally {
             this.isRefreshing = false
