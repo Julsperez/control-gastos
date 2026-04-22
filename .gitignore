@@ -1,0 +1,129 @@
+# =============================================================
+# Control de Gastos Personales — .gitignore
+# =============================================================
+
+# -------------------------------------------------------------
+# SEGURIDAD — nunca versionar
+# -------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# Bases de datos SQLite con datos reales de usuarios
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Claves, certificados y secretos
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# -------------------------------------------------------------
+# Python
+# -------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Distribución / empaquetado
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# mypy / pyright
+.mypy_cache/
+.pytype/
+
+# -------------------------------------------------------------
+# Node / Frontend
+# -------------------------------------------------------------
+node_modules/
+frontend/node_modules/
+
+# Artefactos de build de Vite
+frontend/dist/
+frontend/build/
+
+# Cache de herramientas
+.parcel-cache/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+
+# -------------------------------------------------------------
+# IDEs y editores
+# -------------------------------------------------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# -------------------------------------------------------------
+# Sistema operativo
+# -------------------------------------------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# -------------------------------------------------------------
+# Logs y archivos temporales
+# -------------------------------------------------------------
+*.log
+*.log.*
+logs/
+tmp/
+temp/
+.temp/
+
+# -------------------------------------------------------------
+# Docker
+# -------------------------------------------------------------
+# No ignorar docker-compose.yml ni Dockerfile (son parte del proyecto)
+# Ignorar overrides locales con configuración personal
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Volúmenes y datos generados por Docker en local
+data/
+
+# -------------------------------------------------------------
+# Misc
+# -------------------------------------------------------------
+*.bak
+*.orig
+*.patch
