@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import case
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -20,7 +21,7 @@ def list_categorias(
         .filter(
             (Categoria.user_id == None) | (Categoria.user_id == current_user.id)  # noqa: E711
         )
-        .order_by(Categoria.id)
+        .order_by(case((Categoria.name == "Otros", 1), else_=0), Categoria.id)
         .all()
     )
     return CategoriasListOut(items=items)

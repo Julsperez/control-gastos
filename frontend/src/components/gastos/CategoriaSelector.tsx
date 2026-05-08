@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
 import type { Categoria } from '../../types'
-import { getCategoryBadgeStyle, getCategoryColor } from '../../types'
+import { getCategoryBadgeStyle, getCategoryColor, CATEGORY_ICON_MAP } from '../../types'
 import { useTheme } from '../../hooks/useTheme'
 
 interface CategoriaSelectorProps {
@@ -20,12 +20,13 @@ export function CategoriaSelector({
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-sm font-medium text-[var(--text-secondary)]">Categoría</legend>
+      <legend className="text-sm font-medium mb-2 text-[var(--text-secondary)]">Categoría</legend>
       <div className="flex flex-wrap gap-2">
         {categorias.map((cat) => {
           const isSelected = selectedId === cat.id
           const style = getCategoryBadgeStyle(cat.name, theme)
           const dotColor = getCategoryColor(cat, theme)
+          const IconComponent = CATEGORY_ICON_MAP[cat.icon]
 
           return (
             <button
@@ -51,10 +52,10 @@ export function CategoriaSelector({
               aria-pressed={isSelected}
             >
               {isSelected && <Check size={14} />}
-              <span
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: dotColor }}
-              />
+              {IconComponent
+                ? <IconComponent size={14} style={{ color: dotColor, flexShrink: 0 }} />
+                : <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
+              }
               {cat.name}
             </button>
           )

@@ -1,3 +1,28 @@
+import {
+  Utensils, Car, Home, Heart, Gamepad2, Shirt, Book, Zap, Plane, MoreHorizontal,
+  ShoppingBag, Landmark, UtensilsCrossed, Fuel, CalendarCheck, Tag,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
+export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
+  'utensils':         Utensils,
+  'car':              Car,
+  'home':             Home,
+  'heart':            Heart,
+  'gamepad-2':        Gamepad2,
+  'shirt':            Shirt,
+  'book':             Book,
+  'zap':              Zap,
+  'plane':            Plane,
+  'more-horizontal':  MoreHorizontal,
+  'shopping-bag':     ShoppingBag,
+  'landmark':         Landmark,
+  'utensils-crossed': UtensilsCrossed,
+  'fuel':             Fuel,
+  'calendar-check':   CalendarCheck,
+  'tag':              Tag,
+}
+
 // ============================================================
 // Entidades de dominio
 // ============================================================
@@ -160,30 +185,40 @@ export type ValidationState = 'valid' | 'error' | null
 // ============================================================
 
 export const SYSTEM_CATEGORIES: Categoria[] = [
-  { id: 1,  name: 'Alimentación', color: '#F97316', icon: 'utensils',       is_custom: false },
-  { id: 2,  name: 'Transporte',   color: '#3B82F6', icon: 'car',            is_custom: false },
-  { id: 3,  name: 'Hogar',        color: '#F59E0B', icon: 'home',           is_custom: false },
-  { id: 4,  name: 'Salud',        color: '#10B981', icon: 'heart',          is_custom: false },
-  { id: 5,  name: 'Ocio',         color: '#A855F7', icon: 'gamepad-2',      is_custom: false },
-  { id: 6,  name: 'Ropa',         color: '#14B8A6', icon: 'shirt',          is_custom: false },
-  { id: 7,  name: 'Educación',    color: '#6366F1', icon: 'book',           is_custom: false },
-  { id: 8,  name: 'Servicios',    color: '#64748B', icon: 'zap',            is_custom: false },
-  { id: 9,  name: 'Viajes',       color: '#0EA5E9', icon: 'plane',          is_custom: false },
-  { id: 10, name: 'Otros',        color: '#6B7280', icon: 'more-horizontal', is_custom: false },
+  { id: 1,  name: 'Alimentación',    color: '#F97316', icon: 'utensils',         is_custom: false },
+  { id: 2,  name: 'Transporte',      color: '#3B82F6', icon: 'car',              is_custom: false },
+  { id: 3,  name: 'Hogar',           color: '#F59E0B', icon: 'home',             is_custom: false },
+  { id: 4,  name: 'Salud',           color: '#10B981', icon: 'heart',            is_custom: false },
+  { id: 5,  name: 'Ocio',            color: '#A855F7', icon: 'gamepad-2',        is_custom: false },
+  { id: 6,  name: 'Ropa',            color: '#14B8A6', icon: 'shirt',            is_custom: false },
+  { id: 7,  name: 'Educación',       color: '#6366F1', icon: 'book',             is_custom: false },
+  { id: 8,  name: 'Servicios',       color: '#64748B', icon: 'zap',              is_custom: false },
+  { id: 9,  name: 'Viajes',          color: '#0EA5E9', icon: 'plane',            is_custom: false },
+  { id: 11, name: 'Compras en línea',color: '#EC4899', icon: 'shopping-bag',     is_custom: false },
+  { id: 12, name: 'Impuestos',       color: '#DC2626', icon: 'landmark',         is_custom: false },
+  { id: 13, name: 'Restaurantes',    color: '#F43F5E', icon: 'utensils-crossed', is_custom: false },
+  { id: 14, name: 'Gasolina',        color: '#16A34A', icon: 'fuel',             is_custom: false },
+  { id: 15, name: 'Citas',           color: '#0891B2', icon: 'calendar-check',   is_custom: false },
+  { id: 10, name: 'Otros',           color: '#6B7280', icon: 'more-horizontal',  is_custom: false },
 ]
 
 // Colores optimizados para dark theme (mayor luminancia, cumplen AA sobre bg azul marino)
 export const SYSTEM_CATEGORIES_DARK: Record<number, string> = {
-  1:  '#FB923C', // Alimentación — orange-400
-  2:  '#60A5FA', // Transporte   — blue-400
-  3:  '#FBBF24', // Hogar        — amber-400
-  4:  '#34D399', // Salud        — emerald-400
-  5:  '#C084FC', // Ocio         — purple-400
-  6:  '#2DD4BF', // Ropa         — teal-400
-  7:  '#818CF8', // Educación    — indigo-400
-  8:  '#94A3B8', // Servicios    — slate-400
-  9:  '#38BDF8', // Viajes       — sky-400
-  10: '#9CA3AF', // Otros        — gray-400
+  1:  '#FB923C', // Alimentación    — orange-400
+  2:  '#60A5FA', // Transporte      — blue-400
+  3:  '#FBBF24', // Hogar           — amber-400
+  4:  '#34D399', // Salud           — emerald-400
+  5:  '#C084FC', // Ocio            — purple-400
+  6:  '#2DD4BF', // Ropa            — teal-400
+  7:  '#818CF8', // Educación       — indigo-400
+  8:  '#94A3B8', // Servicios       — slate-400
+  9:  '#38BDF8', // Viajes          — sky-400
+  10: '#9CA3AF', // Otros           — gray-400
+  11: '#F472B6', // Compras en línea — pink-400
+  12: '#F87171', // Impuestos       — red-400
+  13: '#FB7185', // Restaurantes    — rose-400
+  14: '#4ADE80', // Gasolina        — green-400
+  15: '#22D3EE', // Citas           — cyan-400
 }
 
 export function getCategoryColor(categoria: Categoria, theme: 'dark' | 'light' = 'light'): string {
@@ -195,30 +230,40 @@ export function getCategoryColor(categoria: Categoria, theme: 'dark' | 'light' =
 
 // Badge backgrounds por nombre de categoría (light theme)
 export const CATEGORY_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
-  'Alimentación': { bg: '#FFF7ED', text: '#C2410C' },
-  'Transporte':   { bg: '#EFF6FF', text: '#1D4ED8' },
-  'Hogar':        { bg: '#FFFBEB', text: '#92400E' },
-  'Salud':        { bg: '#ECFDF5', text: '#065F46' },
-  'Ocio':         { bg: '#FAF5FF', text: '#7E22CE' },
-  'Ropa':         { bg: '#F0FDFA', text: '#0F766E' },
-  'Educación':    { bg: '#EEF2FF', text: '#4338CA' },
-  'Servicios':    { bg: '#F8FAFC', text: '#334155' },
-  'Viajes':       { bg: '#F0F9FF', text: '#0369A1' },
-  'Otros':        { bg: '#F8FAFC', text: '#334155' },
+  'Alimentación':    { bg: '#FFF7ED', text: '#C2410C' },
+  'Transporte':      { bg: '#EFF6FF', text: '#1D4ED8' },
+  'Hogar':           { bg: '#FFFBEB', text: '#92400E' },
+  'Salud':           { bg: '#ECFDF5', text: '#065F46' },
+  'Ocio':            { bg: '#FAF5FF', text: '#7E22CE' },
+  'Ropa':            { bg: '#F0FDFA', text: '#0F766E' },
+  'Educación':       { bg: '#EEF2FF', text: '#4338CA' },
+  'Servicios':       { bg: '#F8FAFC', text: '#334155' },
+  'Viajes':          { bg: '#F0F9FF', text: '#0369A1' },
+  'Compras en línea':{ bg: '#FDF2F8', text: '#9D174D' },
+  'Impuestos':       { bg: '#FEF2F2', text: '#991B1B' },
+  'Restaurantes':    { bg: '#FFF1F2', text: '#9F1239' },
+  'Gasolina':        { bg: '#F0FDF4', text: '#14532D' },
+  'Citas':           { bg: '#ECFEFF', text: '#155E75' },
+  'Otros':           { bg: '#F8FAFC', text: '#334155' },
 }
 
 // Badge backgrounds dark theme (transparencias sobre bg azul marino)
 export const CATEGORY_BADGE_STYLES_DARK: Record<string, { bg: string; text: string }> = {
-  'Alimentación': { bg: 'rgba(251,146,60,0.15)',  text: '#FDBA74' },
-  'Transporte':   { bg: 'rgba(96,165,250,0.15)',  text: '#93C5FD' },
-  'Hogar':        { bg: 'rgba(251,191,36,0.15)',  text: '#FCD34D' },
-  'Salud':        { bg: 'rgba(52,211,153,0.15)',  text: '#6EE7B7' },
-  'Ocio':         { bg: 'rgba(192,132,252,0.15)', text: '#D8B4FE' },
-  'Ropa':         { bg: 'rgba(45,212,191,0.15)',  text: '#5EEAD4' },
-  'Educación':    { bg: 'rgba(129,140,248,0.15)', text: '#A5B4FC' },
-  'Servicios':    { bg: 'rgba(148,163,184,0.15)', text: '#CBD5E1' },
-  'Viajes':       { bg: 'rgba(56,189,248,0.15)',  text: '#7DD3FC' },
-  'Otros':        { bg: 'rgba(156,163,175,0.15)', text: '#D1D5DB' },
+  'Alimentación':    { bg: 'rgba(251,146,60,0.15)',  text: '#FDBA74' },
+  'Transporte':      { bg: 'rgba(96,165,250,0.15)',  text: '#93C5FD' },
+  'Hogar':           { bg: 'rgba(251,191,36,0.15)',  text: '#FCD34D' },
+  'Salud':           { bg: 'rgba(52,211,153,0.15)',  text: '#6EE7B7' },
+  'Ocio':            { bg: 'rgba(192,132,252,0.15)', text: '#D8B4FE' },
+  'Ropa':            { bg: 'rgba(45,212,191,0.15)',  text: '#5EEAD4' },
+  'Educación':       { bg: 'rgba(129,140,248,0.15)', text: '#A5B4FC' },
+  'Servicios':       { bg: 'rgba(148,163,184,0.15)', text: '#CBD5E1' },
+  'Viajes':          { bg: 'rgba(56,189,248,0.15)',  text: '#7DD3FC' },
+  'Compras en línea':{ bg: 'rgba(244,114,182,0.15)', text: '#F9A8D4' },
+  'Impuestos':       { bg: 'rgba(248,113,113,0.15)', text: '#FCA5A5' },
+  'Restaurantes':    { bg: 'rgba(251,113,133,0.15)', text: '#FDA4AF' },
+  'Gasolina':        { bg: 'rgba(74,222,128,0.15)',  text: '#86EFAC' },
+  'Citas':           { bg: 'rgba(34,211,238,0.15)',  text: '#67E8F9' },
+  'Otros':           { bg: 'rgba(156,163,175,0.15)', text: '#D1D5DB' },
 }
 
 export function getCategoryBadgeStyle(
