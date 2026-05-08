@@ -8,7 +8,7 @@ from app.dependencies import get_current_user, get_db
 from app.models.categoria import Categoria
 from app.models.gasto import Gasto
 from app.models.user import User
-from app.schemas.gasto import GastoCreate, GastoOut, GastosListOut
+from app.schemas.gasto import GastoCreate, GastoOut, GastosListOut, GastoUpdate
 
 router = APIRouter(prefix="/gastos", tags=["gastos"])
 
@@ -100,3 +100,38 @@ def delete_gasto(
 
     db.delete(gasto)
     db.commit()
+
+
+@router.put("/{id}", response_model=GastoOut)
+def update_gasto(
+    data: GastoUpdate,
+    id: int = Path(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    gasto = db.query(Gasto).filter(
+        Gasto.id == id,
+        Gasto.user_id == current_user.id,
+    ).first()
+    if not gasto:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Gasto no encontrado")
+
+    if data.amount is not None:
+        gasto.amount = data.amount
+    if data.category_id is not None:
+        cat = db.query(Categoria).filter(
+            Categoria.id == data.category_id,
+            (Categoria.user_id == None) | (Categoria.user_id == current_user.id),  # noqa: E711
+        ).first()
+        if not cat:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Categoría no encontrada")
+        gasto.category_id = data.category_id
+    if data.description is not None:
+        gasto.description = data.description
+    if data.fecha is not None:
+        gasto.fecha = data.fecha
+
+    db.commit()
+    db.refresh(gasto)
+    _ = gasto.categoria
+    return gasto

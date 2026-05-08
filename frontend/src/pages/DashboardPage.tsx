@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import type { Gasto } from '../types'
 import { LogOut, AlertCircle, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { DashboardSkeleton } from '../components/ui/Skeleton'
@@ -36,6 +37,8 @@ function useIsMobile(): boolean {
 
 export function DashboardPage() {
   const [formOpen, setFormOpen] = useState(false)
+  const [editingGasto, setEditingGasto] = useState<Gasto | null>(null)
+  const isFormOpen = formOpen || editingGasto !== null
   const { dashboard, isLoading, error, refetch } = useDashboard()
   const { budgetStatus } = useBudget()
   const { logout } = useAuth()
@@ -47,9 +50,21 @@ export function DashboardPage() {
     ? user.full_name.split(' ').slice(0, 2).map((n) => n[0]).join('').toUpperCase()
     : user?.email?.[0].toUpperCase() ?? '?'
 
+  function handleFormClose() {
+    setFormOpen(false)
+    setEditingGasto(null)
+  }
+
   function handleFormSuccess() {
+    handleFormClose()
+  }
+
+  function handleEditGasto(gasto: Gasto) {
+    setEditingGasto(gasto)
     setFormOpen(false)
   }
+
+  const formTitle = editingGasto ? 'Editar gasto' : 'Registrar gasto'
 
   const hasData = dashboard && dashboard.total_mes > 0
 
@@ -110,7 +125,7 @@ export function DashboardPage() {
             </div>
           </div>
         ) : !hasData ? (
-          <EmptyState onAction={() => setFormOpen(true)} />
+          <EmptyState onAction={() => { setFormOpen(true); setEditingGasto(null) }} />
         ) : (
           <>
             {/* Layout mobile: una columna */}
@@ -125,7 +140,7 @@ export function DashboardPage() {
               {dashboard.total_por_categoria.length > 0 && (
                 <GraficoBarras data={dashboard.total_por_categoria} />
               )}
-              <GastosList />
+              <GastosList onEdit={handleEditGasto} />
             </div>
 
             {/* Layout desktop: dos columnas */}
@@ -147,11 +162,11 @@ export function DashboardPage() {
                   variant="primary"
                   size="md"
                   fullWidth
-                  onClick={() => setFormOpen(true)}
+                  onClick={() => { setFormOpen(true); setEditingGasto(null) }}
                 >
                   Registrar nuevo gasto
                 </Button>
-                <GastosList />
+                <GastosList onEdit={handleEditGasto} />
               </div>
             </div>
           </>
@@ -160,25 +175,25 @@ export function DashboardPage() {
 
       {/* FAB — solo en mobile */}
       <div className="lg:hidden" aria-hidden="true">
-        <FAB isOpen={formOpen} onClick={() => setFormOpen((v) => !v)} />
+        <FAB isOpen={isFormOpen} onClick={() => { setEditingGasto(null); setFormOpen((v) => !v) }} />
       </div>
 
       {/* Formulario — BottomSheet en mobile, Modal en desktop */}
       {isMobile ? (
         <BottomSheet
-          isOpen={formOpen}
-          onClose={() => setFormOpen(false)}
-          title="Registrar gasto"
+          isOpen={isFormOpen}
+          onClose={handleFormClose}
+          title={formTitle}
         >
-          <GastoForm onSuccess={handleFormSuccess} />
+          <GastoForm onSuccess={handleFormSuccess} initialValues={editingGasto ?? undefined} />
         </BottomSheet>
       ) : (
         <Modal
-          isOpen={formOpen}
-          onClose={() => setFormOpen(false)}
-          title="Registrar gasto"
+          isOpen={isFormOpen}
+          onClose={handleFormClose}
+          title={formTitle}
         >
-          <GastoForm onSuccess={handleFormSuccess} />
+          <GastoForm onSuccess={handleFormSuccess} initialValues={editingGasto ?? undefined} />
         </Modal>
       )}
     </div>

@@ -4,6 +4,7 @@ import { GastoItem } from './GastoItem'
 import { useGastosStore } from '../../store/gastosStore'
 import { useGastos } from '../../hooks/useGastos'
 import { getGastosService } from '../../services/GastosService'
+import type { Gasto } from '../../types'
 
 const PREVIEW_COUNT = 5
 
@@ -16,7 +17,11 @@ function formatMonthLabel(yyyymm: string): string {
   return label.charAt(0).toUpperCase() + label.slice(1)
 }
 
-export function GastosList() {
+interface GastosListProps {
+  onEdit: (gasto: Gasto) => void
+}
+
+export function GastosList({ onEdit }: GastosListProps) {
   const { gastos, mesActual, setGastos, setMes } = useGastosStore()
   const { handleDeleteGasto } = useGastos()
 
@@ -99,7 +104,7 @@ export function GastosList() {
           <>
             <div>
               {visibleGastos.map((g) => (
-                <GastoItem key={g.id} gasto={g} onDelete={handleDeleteGasto} />
+                <GastoItem key={g.id} gasto={g} onDelete={handleDeleteGasto} onEdit={onEdit} />
               ))}
             </div>
 

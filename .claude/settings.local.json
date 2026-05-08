@@ -1,8 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(py --version)",
-      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Julsp\\\\repos\\\\control-gastos\" -Force)"
-    ]
+    "allow": []
   }
 }

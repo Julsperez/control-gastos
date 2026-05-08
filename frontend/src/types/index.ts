@@ -49,6 +49,13 @@ export interface GastoCreate {
   fecha?: string  // 'YYYY-MM-DD', default: hoy
 }
 
+export interface GastoUpdate {
+  amount?: number
+  category_id?: number
+  description?: string
+  fecha?: string  // 'YYYY-MM-DD'
+}
+
 export interface CategoriaCreate {
   name: string
   color?: string

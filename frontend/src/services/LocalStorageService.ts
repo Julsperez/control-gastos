@@ -9,6 +9,7 @@ import type {
   DashboardResumen,
   Gasto,
   GastoCreate,
+  GastoUpdate,
   GastoDiario,
   GastosResponse,
   LoginRequest,
@@ -228,6 +229,37 @@ export class LocalStorageGastosService implements IGastosService {
     }
     gastos.splice(idx, 1)
     write(KEYS.GASTOS, gastos)
+  }
+
+  async updateGasto(id: number, data: GastoUpdate): Promise<Gasto> {
+    await delay()
+    const gastos = this.readGastos()
+    const idx = gastos.findIndex((g) => g.id === id)
+    if (idx === -1) {
+      throw Object.assign(new Error('Gasto no encontrado'), { status: 404 })
+    }
+    const existing = gastos[idx]
+
+    let categoria = existing.categoria
+    if (data.category_id !== undefined && data.category_id !== existing.categoria.id) {
+      const found = this.getCategoriaById(data.category_id)
+      if (!found) {
+        throw Object.assign(new Error('Categoría no encontrada'), { status: 404 })
+      }
+      categoria = found
+    }
+
+    const updated: Gasto = {
+      ...existing,
+      amount:      data.amount      ?? existing.amount,
+      description: data.description ?? existing.description,
+      fecha:       data.fecha       ?? existing.fecha,
+      categoria,
+    }
+
+    gastos[idx] = updated
+    write(KEYS.GASTOS, gastos)
+    return updated
   }
 
   async getAvailableMonths(): Promise<string[]> {

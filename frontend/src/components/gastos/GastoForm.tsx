@@ -7,23 +7,27 @@ import { useGastosStore } from '../../store/gastosStore'
 import { useGastos } from '../../hooks/useGastos'
 import { AlertCircle } from 'lucide-react'
 import { todayISO } from '../../types'
+import type { Gasto } from '../../types'
 
 interface GastoFormProps {
   onSuccess: () => void
+  initialValues?: Gasto
 }
 
-export function GastoForm({ onSuccess }: GastoFormProps) {
-  const [amount, setAmount] = useState('')
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
+export function GastoForm({ onSuccess, initialValues }: GastoFormProps) {
+  const [amount, setAmount] = useState(initialValues ? String(initialValues.amount) : '')
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    initialValues ? initialValues.categoria.id : null,
+  )
   const [customCategoryName, setCustomCategoryName] = useState('')
-  const [description, setDescription] = useState('')
-  const [fecha, setFecha] = useState(todayISO())
+  const [description, setDescription] = useState(initialValues?.description ?? '')
+  const [fecha, setFecha] = useState(initialValues ? initialValues.fecha : todayISO())
   const [amountError, setAmountError] = useState('')
   const [categoryError, setCategoryError] = useState('')
 
   const amountRef = useRef<HTMLInputElement>(null)
   const categorias = useGastosStore((s) => s.categorias)
-  const { handleAddGasto, isSubmitting, submitError, setSubmitError } = useGastos(onSuccess)
+  const { handleAddGasto, handleUpdateGasto, isSubmitting, submitError, setSubmitError } = useGastos(onSuccess)
 
   const OTROS_ID = categorias.find((c) => c.name === 'Otros')?.id ?? 10
   const showCustomInput = selectedCategoryId === OTROS_ID
@@ -65,12 +69,21 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
 
     if (!valid) return
 
-    await handleAddGasto({
-      amount: parsedAmount,
-      category_id: selectedCategoryId!,
-      description: description.trim() || undefined,
-      fecha,
-    })
+    if (initialValues) {
+      await handleUpdateGasto(initialValues.id, {
+        amount: parsedAmount,
+        category_id: selectedCategoryId!,
+        description: description.trim() || undefined,
+        fecha,
+      })
+    } else {
+      await handleAddGasto({
+        amount: parsedAmount,
+        category_id: selectedCategoryId!,
+        description: description.trim() || undefined,
+        fecha,
+      })
+    }
   }
 
   return (
@@ -173,7 +186,10 @@ export function GastoForm({ onSuccess }: GastoFormProps) {
         fullWidth
         className="mt-1"
       >
-        {isSubmitting ? 'Guardando…' : 'Guardar gasto'}
+        {isSubmitting
+          ? (initialValues ? 'Guardando cambios…' : 'Guardando…')
+          : (initialValues ? 'Guardar cambios' : 'Guardar gasto')
+        }
       </Button>
     </form>
   )

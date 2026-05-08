@@ -15,7 +15,7 @@ export function Badge({ categoria, size = 'sm' }: BadgeProps) {
   if (size === 'md') {
     return (
       <span
-        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md border"
+        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md border mb-2"
         style={{
           backgroundColor: style.bg,
           color: style.text,
@@ -33,7 +33,7 @@ export function Badge({ categoria, size = 'sm' }: BadgeProps) {
 
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-sm"
+      className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-sm mb-2"
       style={{ backgroundColor: style.bg, color: style.text }}
     >
       <span

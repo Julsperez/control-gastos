@@ -8,6 +8,7 @@ import type {
   DashboardResumen,
   Gasto,
   GastoCreate,
+  GastoUpdate,
   GastosResponse,
   LoginRequest,
   RegisterRequest,
@@ -27,6 +28,7 @@ export interface IGastosService {
   getGastos(mes?: string, categoria_id?: number): Promise<GastosResponse>
   addGasto(data: GastoCreate): Promise<Gasto>
   deleteGasto(id: number): Promise<void>
+  updateGasto(id: number, data: GastoUpdate): Promise<Gasto>
 
   // Categorías
   getCategorias(): Promise<Categoria[]>

@@ -9,6 +9,7 @@ import type {
   DashboardResumen,
   Gasto,
   GastoCreate,
+  GastoUpdate,
   GastosResponse,
   LoginRequest,
   RegisterRequest,
@@ -130,6 +131,11 @@ export class ApiGastosService implements IGastosService {
 
   async deleteGasto(id: number): Promise<void> {
     await this.client.delete(`/gastos/${id}`)
+  }
+
+  async updateGasto(id: number, data: GastoUpdate): Promise<Gasto> {
+    const res = await this.client.put<Gasto>(`/gastos/${id}`, data)
+    return res.data
   }
 
   async getAvailableMonths(): Promise<string[]> {

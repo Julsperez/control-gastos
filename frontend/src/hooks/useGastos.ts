@@ -3,12 +3,12 @@ import { getGastosService } from '../services/GastosService'
 import { useGastosStore } from '../store/gastosStore'
 import { useBudgetStore } from '../store/budgetStore'
 import { useToast } from './useToast'
-import type { GastoCreate } from '../types'
+import type { GastoCreate, GastoUpdate } from '../types'
 
 export function useGastos(onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const { addGasto, removeGasto, setDashboard, mesActual } = useGastosStore()
+  const { addGasto, removeGasto, updateGasto, setDashboard, mesActual } = useGastosStore()
   const { setBudgetStatus } = useBudgetStore()
   const { showToast } = useToast()
 
@@ -39,6 +39,32 @@ export function useGastos(onSuccess?: () => void) {
     }
   }
 
+  async function handleUpdateGasto(id: number, data: GastoUpdate): Promise<boolean> {
+    setIsSubmitting(true)
+    setSubmitError(null)
+    try {
+      const svc = await getGastosService()
+      const updatedGasto = await svc.updateGasto(id, data)
+      updateGasto(updatedGasto)
+
+      const [dashboard, budgetStatus] = await Promise.all([
+        svc.getDashboardData(mesActual),
+        svc.getBudgetStatus(mesActual),
+      ])
+      setDashboard(dashboard)
+      setBudgetStatus(budgetStatus)
+
+      showToast('Gasto actualizado', 'success', 2500)
+      onSuccess?.()
+      return true
+    } catch {
+      setSubmitError('No pudimos actualizar el gasto. Verifica tu conexión e intenta de nuevo.')
+      return false
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   async function handleDeleteGasto(id: number): Promise<void> {
     try {
       const svc = await getGastosService()
@@ -57,5 +83,5 @@ export function useGastos(onSuccess?: () => void) {
     }
   }
 
-  return { handleAddGasto, handleDeleteGasto, isSubmitting, submitError, setSubmitError }
+  return { handleAddGasto, handleUpdateGasto, handleDeleteGasto, isSubmitting, submitError, setSubmitError }
 }

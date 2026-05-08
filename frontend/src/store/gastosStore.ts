@@ -15,6 +15,7 @@ interface GastosState {
   setGastos: (gastos: Gasto[]) => void
   addGasto: (gasto: Gasto) => void
   removeGasto: (id: number) => void
+  updateGasto: (gasto: Gasto) => void
   setCategorias: (cats: Categoria[]) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
@@ -36,6 +37,8 @@ export const useGastosStore = create<GastosState>()((set) => ({
     set((state) => ({ gastos: [gasto, ...state.gastos] })),
   removeGasto: (id) =>
     set((state) => ({ gastos: state.gastos.filter((g) => g.id !== id) })),
+  updateGasto: (gasto) =>
+    set((state) => ({ gastos: state.gastos.map((g) => (g.id === gasto.id ? gasto : g)) })),
   setCategorias: (cats) => set({ categorias: cats }),
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),

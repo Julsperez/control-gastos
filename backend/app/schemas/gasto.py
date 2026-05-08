@@ -12,6 +12,13 @@ class GastoCreate(BaseModel):
     fecha: date | None = None
 
 
+class GastoUpdate(BaseModel):
+    amount: float | None = Field(default=None, gt=0)
+    category_id: int | None = None
+    description: str | None = Field(default=None, max_length=255)
+    fecha: date | None = None
+
+
 class GastoOut(BaseModel):
     id: int
     amount: float
