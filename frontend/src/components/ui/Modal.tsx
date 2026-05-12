@@ -52,7 +52,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 pb-4 border-b border-[var(--border-subtle)]">
-          <h2 id="modal-title" className="text-xl font-bold text-[var(--text-primary)]">
+          <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)]">
             {title}
           </h2>
           <button

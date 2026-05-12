@@ -10,25 +10,25 @@ export function SettingsPage() {
   const navigate = useNavigate()
   const { budgetStatus, updateSettings } = useBudget()
 
-  const [budget, setBudget] = useState('')
-  const [warning, setWarning] = useState('70')
-  const [critical, setCritical] = useState('90')
+  const [form, setForm] = useState({ budget: '', warning: '70', critical: '90' })
   const [saving, setSaving] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     if (budgetStatus) {
-      setBudget(budgetStatus.budget !== null ? String(budgetStatus.budget) : '')
-      setWarning(String(budgetStatus.alert_threshold_warning))
-      setCritical(String(budgetStatus.alert_threshold_critical))
+      setForm({
+        budget:   budgetStatus.budget !== null ? String(budgetStatus.budget) : '',
+        warning:  String(budgetStatus.alert_threshold_warning),
+        critical: String(budgetStatus.alert_threshold_critical),
+      })
     }
   }, [budgetStatus])
 
   function validate(): boolean {
     const errs: Record<string, string> = {}
-    const w = Number(warning)
-    const c = Number(critical)
-    const b = budget.trim() !== '' ? Number(budget) : null
+    const w = Number(form.warning)
+    const c = Number(form.critical)
+    const b = form.budget.trim() !== '' ? Number(form.budget) : null
 
     if (b !== null && (isNaN(b) || b <= 0)) errs.budget = 'Debe ser un número positivo'
     if (isNaN(w) || w < 1 || w > 99) errs.warning = 'Debe estar entre 1 y 99'
@@ -47,9 +47,9 @@ export function SettingsPage() {
 
     setSaving(true)
     const ok = await updateSettings({
-      monthly_budget: budget.trim() !== '' ? Number(budget) : null,
-      alert_threshold_warning: Number(warning),
-      alert_threshold_critical: Number(critical),
+      monthly_budget: form.budget.trim() !== '' ? Number(form.budget) : null,
+      alert_threshold_warning: Number(form.warning),
+      alert_threshold_critical: Number(form.critical),
     })
     setSaving(false)
 
@@ -76,47 +76,41 @@ export function SettingsPage() {
             <h2 className="text-sm font-semibold text-[var(--text-secondary)]">Presupuesto mensual</h2>
 
             <div>
-              <label className="block text-sm text-[var(--text-secondary)] mb-1">
-                Monto del presupuesto mensual
-              </label>
               <Input
+                label="Monto del presupuesto mensual"
+                hint="Dejá vacío para no tener presupuesto"
                 type="number"
                 min="0"
                 step="0.01"
                 placeholder="Sin límite"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
+                value={form.budget}
+                onChange={(e) => setForm(prev => ({ ...prev, budget: e.target.value }))}
                 validationState={errors.budget ? 'error' : null}
               />
               {errors.budget && <p className="text-xs text-[var(--text-error)] mt-1">{errors.budget}</p>}
-              <p className="text-xs text-[var(--text-tertiary)] mt-1">Dejá vacío para no tener presupuesto</p>
             </div>
 
             <div>
-              <label className="block text-sm text-[var(--text-secondary)] mb-1">
-                Umbral de advertencia (%)
-              </label>
               <Input
+                label="Umbral de advertencia (%)"
                 type="number"
                 min="1"
                 max="99"
-                value={warning}
-                onChange={(e) => setWarning(e.target.value)}
+                value={form.warning}
+                onChange={(e) => setForm(prev => ({ ...prev, warning: e.target.value }))}
                 validationState={errors.warning ? 'error' : null}
               />
               {errors.warning && <p className="text-xs text-[var(--text-error)] mt-1">{errors.warning}</p>}
             </div>
 
             <div>
-              <label className="block text-sm text-[var(--text-secondary)] mb-1">
-                Umbral crítico (%)
-              </label>
               <Input
+                label="Umbral crítico (%)"
                 type="number"
                 min="2"
                 max="100"
-                value={critical}
-                onChange={(e) => setCritical(e.target.value)}
+                value={form.critical}
+                onChange={(e) => setForm(prev => ({ ...prev, critical: e.target.value }))}
                 validationState={errors.critical ? 'error' : null}
               />
               {errors.critical && <p className="text-xs text-[var(--text-error)] mt-1">{errors.critical}</p>}

@@ -156,7 +156,7 @@ export function BottomSheet({ isOpen, onClose, title, children, footer }: Bottom
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 pb-4 border-b border-[var(--border-subtle)] flex-shrink-0">
-          <h2 id="sheet-title" className="text-xl font-bold text-[var(--text-primary)]">
+          <h2 id="sheet-title" className="text-xl font-semibold text-[var(--text-primary)]">
             {title}
           </h2>
           <button

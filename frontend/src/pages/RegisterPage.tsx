@@ -18,7 +18,7 @@ export function RegisterPage() {
 
       {/* Logo */}
       <div className="flex flex-col items-center gap-2 mb-6">
-        <div className="w-12 h-12 bg-[var(--accent-primary)] rounded-xl flex items-center justify-center shadow-[var(--shadow-glow)]">
+        <div className="size-12 bg-[var(--accent-primary)] rounded-xl flex items-center justify-center shadow-[var(--shadow-glow)]">
           <DollarSign size={24} className="text-[var(--btn-primary-text)]" />
         </div>
       </div>
@@ -26,7 +26,7 @@ export function RegisterPage() {
       {/* Card del formulario */}
       <div className="w-full max-w-sm">
         <div className="glass-modal rounded-xl p-6">
-          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">Crear cuenta</h2>
+          <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-1">Crear cuenta</h2>
           <p className="text-sm text-[var(--text-secondary)] mb-6">Comienza a controlar tus gastos hoy</p>
           <RegisterForm />
         </div>

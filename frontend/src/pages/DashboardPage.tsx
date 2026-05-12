@@ -88,7 +88,7 @@ export function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[var(--accent-primary-subtle)] flex items-center justify-center">
+          <div className="size-8 rounded-full bg-[var(--accent-primary-subtle)] flex items-center justify-center">
             <span className="text-sm font-bold text-[var(--accent-primary)]">{initials}</span>
           </div>
           <ThemeToggle />

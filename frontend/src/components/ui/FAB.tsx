@@ -12,7 +12,7 @@ export function FAB({ isOpen, onClick }: FABProps) {
       aria-label={isOpen ? 'Cerrar formulario' : 'Registrar gasto'}
       className={[
         'fixed bottom-6 right-4 z-50',
-        'w-14 h-14 rounded-full',
+        'size-14 rounded-full',
         'bg-[var(--accent-primary)] text-[var(--btn-primary-text)]',
         'shadow-[var(--shadow-fab)]',
         'flex items-center justify-center',

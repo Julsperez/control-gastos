@@ -48,7 +48,7 @@ export function CategoriaSelector({
               <div className="flex items-center justify-center">
                 {IconComponent
                   ? <IconComponent size={26} style={{ color: iconColor }} />
-                  : <span className="w-6 h-6 rounded-full" style={{ backgroundColor: iconColor }} />
+                  : <span className="size-6 rounded-full" style={{ backgroundColor: iconColor }} />
                 }
               </div>
               <span className="text-xs font-medium text-center leading-tight px-1" style={{ color: style.text }}>

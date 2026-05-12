@@ -104,9 +104,6 @@ export interface GastosResponse {
   sum: number
 }
 
-export interface CategoriasResponse {
-  items: Categoria[]
-}
 
 export interface TotalPorCategoria {
   categoria_id: number
@@ -215,7 +212,7 @@ export function getCategoryColor(categoria: Categoria, theme: 'dark' | 'light' =
 }
 
 // Badge backgrounds por nombre de categoría (light theme)
-export const CATEGORY_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
+const CATEGORY_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
   'Despensa y súper':           { bg: '#FFF7ED', text: '#C2410C' },
   'Restaurantes y comida fuera':{ bg: '#FFF1F2', text: '#9F1239' },
   'Transporte':                  { bg: '#EFF6FF', text: '#1D4ED8' },

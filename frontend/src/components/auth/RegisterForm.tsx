@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react'
+import { type Dispatch, type FormEvent, type SetStateAction, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Input } from '../ui/Input'
 import { Button } from '../ui/Button'
@@ -40,21 +40,21 @@ function validateConfirm(v: string, pwd: string): string {
 }
 
 export function RegisterForm() {
-  const [name, setName] = useState<FieldState>(initField())
-  const [email, setEmail] = useState<FieldState>(initField())
-  const [password, setPassword] = useState<FieldState>(initField())
-  const [confirm, setConfirm] = useState<FieldState>(initField())
+  const [name, setName] = useState<FieldState>(() => initField())
+  const [email, setEmail] = useState<FieldState>(() => initField())
+  const [password, setPassword] = useState<FieldState>(() => initField())
+  const [confirm, setConfirm] = useState<FieldState>(() => initField())
   const [emailTakenError, setEmailTakenError] = useState(false)
 
   const { register, isLoading } = useAuth()
 
   function blurField(
     field: FieldState,
-    setField: (f: FieldState) => void,
+    setField: Dispatch<SetStateAction<FieldState>>,
     validate: (v: string) => string,
   ) {
     const err = validate(field.value)
-    setField({ ...field, touched: true, error: err, validationState: err ? 'error' : 'valid' })
+    setField(prev => ({ ...prev, touched: true, error: err, validationState: err ? 'error' : 'valid' }))
   }
 
   function changeField(
