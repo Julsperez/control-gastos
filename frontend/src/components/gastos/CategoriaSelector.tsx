@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react'
 import type { Categoria } from '../../types'
 import { getCategoryBadgeStyle, getCategoryColor, CATEGORY_ICON_MAP } from '../../types'
 import { useTheme } from '../../hooks/useTheme'
@@ -21,11 +20,11 @@ export function CategoriaSelector({
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="text-sm font-medium mb-2 text-[var(--text-secondary)]">Categoría</legend>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-3 gap-3">
         {categorias.map((cat) => {
           const isSelected = selectedId === cat.id
           const style = getCategoryBadgeStyle(cat.name, theme)
-          const dotColor = getCategoryColor(cat, theme)
+          const iconColor = getCategoryColor(cat, theme)
           const IconComponent = CATEGORY_ICON_MAP[cat.icon]
 
           return (
@@ -34,29 +33,27 @@ export function CategoriaSelector({
               type="button"
               onClick={() => onSelect(cat.id)}
               className={[
-                'inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md border transition-all duration-150',
+                'flex flex-col items-center justify-center gap-1.5 w-full rounded-2xl transition-all duration-150',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-1',
-                isSelected
-                  ? 'border-2'
-                  : 'bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--border-strong)]',
+                isSelected ? '' : 'hover:brightness-95 active:scale-[0.97]',
               ].join(' ')}
-              style={
-                isSelected
-                  ? {
-                      backgroundColor: style.bg,
-                      color: style.text,
-                      borderColor: dotColor,
-                    }
-                  : undefined
-              }
+              style={{
+                backgroundColor: style.bg,
+                outline: isSelected ? `2.5px solid ${iconColor}` : 'none',
+                outlineOffset: '2px',
+                height: '5rem',
+              }}
               aria-pressed={isSelected}
             >
-              {isSelected && <Check size={14} />}
-              {IconComponent
-                ? <IconComponent size={14} style={{ color: dotColor, flexShrink: 0 }} />
-                : <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-              }
-              {cat.name}
+              <div className="flex items-center justify-center">
+                {IconComponent
+                  ? <IconComponent size={26} style={{ color: iconColor }} />
+                  : <span className="w-6 h-6 rounded-full" style={{ backgroundColor: iconColor }} />
+                }
+              </div>
+              <span className="text-xs font-medium text-center leading-tight px-1" style={{ color: style.text }}>
+                {cat.name}
+              </span>
             </button>
           )
         })}

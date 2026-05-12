@@ -29,7 +29,7 @@ export function GastoForm({ onSuccess, initialValues }: GastoFormProps) {
   const categorias = useGastosStore((s) => s.categorias)
   const { handleAddGasto, handleUpdateGasto, isSubmitting, submitError, setSubmitError } = useGastos(onSuccess)
 
-  const OTROS_ID = categorias.find((c) => c.name === 'Otros')?.id ?? 10
+  const OTROS_ID = categorias.find((c) => c.name === 'Familia y otros')?.id ?? 10
   const showCustomInput = selectedCategoryId === OTROS_ID
 
   // Foco automático con delay para esperar a la animación de entrada

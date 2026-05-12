@@ -19,6 +19,20 @@ for _stmt in _COLUMN_MIGRATIONS:
     with engine.begin() as _conn:
         _conn.execute(text(_stmt))
 
+# Migración de datos: reasignar gastos y eliminar categorías obsoletas del sistema
+# Idempotente: UPDATE sin matches y DELETE de filas inexistentes no tienen efecto
+_CATEGORY_DATA_MIGRATIONS = [
+    "UPDATE gastos SET category_id = 2  WHERE category_id = 14",   # Gasolina → Transporte
+    "UPDATE gastos SET category_id = 5  WHERE category_id = 15",   # Citas → Ocio y entretenimiento
+    "UPDATE gastos SET category_id = 10 WHERE category_id = 9",    # Viajes → Familia y otros
+    "UPDATE gastos SET category_id = 10 WHERE category_id = 11",   # Compras en línea → Familia y otros
+    "UPDATE gastos SET category_id = 10 WHERE category_id = 12",   # Impuestos → Familia y otros
+    "DELETE FROM categorias WHERE id IN (9, 11, 12, 14, 15) AND user_id IS NULL",
+]
+for _stmt in _CATEGORY_DATA_MIGRATIONS:
+    with engine.begin() as _conn:
+        _conn.execute(text(_stmt))
+
 from app._seed import seed_categorias  # noqa: E402
 
 seed_categorias()
