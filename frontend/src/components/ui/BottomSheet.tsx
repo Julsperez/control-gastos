@@ -6,15 +6,23 @@ interface BottomSheetProps {
   onClose: () => void
   title: string
   children: ReactNode
+  footer?: ReactNode
 }
 
-export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetProps) {
+export function BottomSheet({ isOpen, onClose, title, children, footer }: BottomSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null)
-  const startYRef = useRef(0)
-  const currentYRef = useRef(0)
-  const isDraggingRef = useRef(false)
+  const scrollBodyRef = useRef<HTMLDivElement>(null)
+  const handleRef = useRef<HTMLDivElement>(null)
 
-  // Bloquear scroll del body
+  // Coordenadas y flags del gesto activo
+  const startYRef = useRef(0)
+  const currentDeltaRef = useRef(0)
+  const isDraggingRef = useRef(false)
+  // Dirección inicial del gesto: null = sin determinar, 'vertical' | 'horizontal'
+  const gestureDirectionRef = useRef<'vertical' | 'horizontal' | null>(null)
+  const startXRef = useRef(0)
+
+  // Bloquear scroll del body mientras el sheet está abierto
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -24,47 +32,91 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  // Swipe to close
+  // Swipe-to-dismiss — listeners solo en el handle para evitar conflicto con scroll
   useEffect(() => {
+    const handle = handleRef.current
     const sheet = sheetRef.current
-    if (!sheet || !isOpen) return
+    if (!handle || !sheet || !isOpen) return
+
+    // Capturamos en consts no-null para que TypeScript las propague a los closures
+    const safeHandle: HTMLDivElement = handle
+    const safeSheet: HTMLDivElement = sheet
 
     function onTouchStart(e: TouchEvent) {
       startYRef.current = e.touches[0].clientY
+      startXRef.current = e.touches[0].clientX
+      currentDeltaRef.current = 0
       isDraggingRef.current = true
+      gestureDirectionRef.current = null
     }
 
     function onTouchMove(e: TouchEvent) {
       if (!isDraggingRef.current) return
-      const delta = e.touches[0].clientY - startYRef.current
-      currentYRef.current = delta
-      if (delta > 0 && sheet) {
-        sheet.style.transform = `translateY(${delta}px)`
-        sheet.style.transition = 'none'
+
+      const deltaY = e.touches[0].clientY - startYRef.current
+      const deltaX = e.touches[0].clientX - startXRef.current
+
+      // Determinar la dirección del gesto en los primeros píxeles de movimiento
+      if (gestureDirectionRef.current === null) {
+        if (Math.abs(deltaY) > 6 || Math.abs(deltaX) > 6) {
+          gestureDirectionRef.current =
+            Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal'
+        }
+        return
+      }
+
+      // Si el gesto fue horizontal, no hacemos nada
+      if (gestureDirectionRef.current === 'horizontal') return
+
+      // Solo seguimos si el scroll del body está en el tope
+      const scrollTop = scrollBodyRef.current?.scrollTop ?? 0
+      if (scrollTop > 0) {
+        // Contenido con scroll activo — cancelar el drag y dejar que el navegador
+        // maneje el scroll normalmente
+        isDraggingRef.current = false
+        safeSheet.style.transform = ''
+        safeSheet.style.transition = ''
+        return
+      }
+
+      currentDeltaRef.current = deltaY
+
+      if (deltaY > 0) {
+        safeSheet.style.transform = `translateY(${deltaY}px)`
+        safeSheet.style.transition = 'none'
       }
     }
 
     function onTouchEnd(e: TouchEvent) {
+      if (!isDraggingRef.current) return
       isDraggingRef.current = false
-      const velocity = e.changedTouches[0].clientY - startYRef.current
-      if (velocity > 80 || velocity > 500 / 1000) {
+
+      const deltaY = e.changedTouches[0].clientY - startYRef.current
+
+      // Umbral de distancia: >80px hacia abajo cierra el sheet
+      if (
+        gestureDirectionRef.current === 'vertical' &&
+        deltaY > 80 &&
+        (scrollBodyRef.current?.scrollTop ?? 0) === 0
+      ) {
         onClose()
       } else {
-        if (sheet) {
-          sheet.style.transform = ''
-          sheet.style.transition = ''
-        }
+        safeSheet.style.transform = ''
+        safeSheet.style.transition = ''
       }
-      currentYRef.current = 0
+
+      currentDeltaRef.current = 0
+      gestureDirectionRef.current = null
     }
 
-    sheet.addEventListener('touchstart', onTouchStart, { passive: true })
-    sheet.addEventListener('touchmove', onTouchMove, { passive: true })
-    sheet.addEventListener('touchend', onTouchEnd, { passive: true })
+    safeHandle.addEventListener('touchstart', onTouchStart, { passive: true })
+    safeHandle.addEventListener('touchmove', onTouchMove, { passive: true })
+    safeHandle.addEventListener('touchend', onTouchEnd, { passive: true })
+
     return () => {
-      sheet.removeEventListener('touchstart', onTouchStart)
-      sheet.removeEventListener('touchmove', onTouchMove)
-      sheet.removeEventListener('touchend', onTouchEnd)
+      safeHandle.removeEventListener('touchstart', onTouchStart)
+      safeHandle.removeEventListener('touchmove', onTouchMove)
+      safeHandle.removeEventListener('touchend', onTouchEnd)
     }
   }, [isOpen, onClose])
 
@@ -78,7 +130,8 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
         onClick={onClose}
         aria-hidden
       />
-      {/* Sheet */}
+
+      {/* Sheet — layout flex column para que el footer nunca quede oculto */}
       <div
         ref={sheetRef}
         role="dialog"
@@ -87,17 +140,22 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
         className={[
           'absolute bottom-0 left-0 right-0 z-50',
           'glass-modal rounded-t-[20px]',
-          'max-h-[90vh] overflow-y-auto',
+          'max-h-[90vh]',
+          'flex flex-col',
           'animate-sheet-up',
         ].join(' ')}
-        style={{ paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}
       >
-        {/* Handle */}
-        <div className="flex justify-center pt-3 pb-4">
-          <div className="w-8 h-1 bg-[var(--border-strong)] rounded-full" />
+        {/* Handle — zona exclusiva de swipe-to-dismiss */}
+        <div
+          ref={handleRef}
+          className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing flex-shrink-0"
+          aria-hidden
+        >
+          <div className="w-10 h-1.5 bg-[var(--border-strong)] rounded-full" />
         </div>
+
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pb-4 border-b border-[var(--border-subtle)]">
+        <div className="flex items-center justify-between px-4 pb-4 border-b border-[var(--border-subtle)] flex-shrink-0">
           <h2 id="sheet-title" className="text-xl font-bold text-[var(--text-primary)]">
             {title}
           </h2>
@@ -109,7 +167,23 @@ export function BottomSheet({ isOpen, onClose, title, children }: BottomSheetPro
             <X size={20} />
           </button>
         </div>
-        <div className="px-4 pt-4">{children}</div>
+
+        {/* Cuerpo scrollable — ocupa todo el espacio disponible */}
+        <div
+          ref={scrollBodyRef}
+          className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4"
+        >
+          {children}
+        </div>
+
+        {/* Footer sticky — siempre visible, fuera del área scrollable */}
+        {footer && (
+          <div
+            className="flex-shrink-0 px-4 pt-3 pb-[calc(16px+env(safe-area-inset-bottom,0px))] border-t border-[var(--border-subtle)] bg-[var(--bg-card)]"
+          >
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   )

@@ -22,7 +22,7 @@ export function FAB({ isOpen, onClick }: FABProps) {
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-card)]',
         'animate-fab-appear',
       ].join(' ')}
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', zIndex: 0 }}
     >
       <span
         className="transition-transform duration-200 ease-out"

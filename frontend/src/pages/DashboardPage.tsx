@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Gasto } from '../types'
 import { LogOut, AlertCircle, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ import { GraficoBarras } from '../components/dashboard/GraficoBarras'
 import { GastosList } from '../components/dashboard/GastosList'
 import { BudgetWidget } from '../components/dashboard/BudgetWidget'
 import { BudgetAlertBanner } from '../components/dashboard/BudgetAlertBanner'
-import { GastoForm } from '../components/gastos/GastoForm'
+import { GastoForm, type GastoFormHandle } from '../components/gastos/GastoForm'
 import { useDashboard } from '../hooks/useDashboard'
 import { useBudget } from '../hooks/useBudget'
 import { useAuth } from '../hooks/useAuth'
@@ -65,6 +65,9 @@ export function DashboardPage() {
   }
 
   const formTitle = editingGasto ? 'Editar gasto' : 'Registrar gasto'
+
+  // Ref para acceder al submit del GastoForm desde el footer sticky del BottomSheet
+  const gastoFormRef = useRef<GastoFormHandle>(null)
 
   const hasData = dashboard && dashboard.total_mes > 0
 
@@ -184,8 +187,27 @@ export function DashboardPage() {
           isOpen={isFormOpen}
           onClose={handleFormClose}
           title={formTitle}
+          footer={
+            <Button
+              type="button"
+              variant="primary"
+              size="lg"
+              fullWidth
+              isLoading={gastoFormRef.current?.isSubmitting ?? false}
+              onClick={() => gastoFormRef.current?.submit()}
+            >
+              {gastoFormRef.current?.isSubmitting
+                ? (editingGasto ? 'Guardando cambios…' : 'Guardando…')
+                : (editingGasto ? 'Guardar cambios' : 'Guardar gasto')}
+            </Button>
+          }
         >
-          <GastoForm onSuccess={handleFormSuccess} initialValues={editingGasto ?? undefined} />
+          <GastoForm
+            ref={gastoFormRef}
+            onSuccess={handleFormSuccess}
+            initialValues={editingGasto ?? undefined}
+            hideSubmit
+          />
         </BottomSheet>
       ) : (
         <Modal
