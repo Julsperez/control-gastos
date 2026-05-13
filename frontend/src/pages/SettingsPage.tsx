@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
-import { ThemeToggle } from '../components/ui/ThemeToggle'
 import { useBudget } from '../hooks/useBudget'
 import { getGastosService } from '../services/GastosService'
 import type { MonthlyBudgetEntry } from '../types'
@@ -62,7 +61,7 @@ export function SettingsPage() {
     })
     setSaving(false)
 
-    if (ok) navigate('/')
+    if (ok) navigate('/gastos')
   }
 
   // ──────────────────────────────────────────────
@@ -140,14 +139,13 @@ export function SettingsPage() {
     <div className="min-h-screen">
       <header className="glass-header sticky top-0 z-30 h-14 flex items-center px-4 gap-3">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/settings')}
           className="p-1.5 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
-          aria-label="Volver al dashboard"
+          aria-label="Volver a configuración"
         >
           <ArrowLeft size={18} />
         </button>
-        <h1 className="text-base font-semibold text-[var(--text-primary)] flex-1">Configuración</h1>
-        <ThemeToggle />
+        <h1 className="text-base font-semibold text-[var(--text-primary)] flex-1">Presupuestos</h1>
       </header>
 
       <main className="max-w-lg mx-auto p-6 flex flex-col gap-6">

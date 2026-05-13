@@ -26,7 +26,7 @@ const remainingColor: Record<string, string> = {
 export function BudgetWidget({ status, isLoading, mes }: Props) {
   const navigate = useNavigate()
   const mesParam = mes ?? currentMonth()
-  const settingsUrl = `/settings?mes=${mesParam}`
+  const settingsUrl = `/settings/budget?mes=${mesParam}`
   const isCurrentMonth = mesParam === currentMonth()
   const monthLabel = isCurrentMonth ? 'Presupuesto mensual' : `Presupuesto — ${formatMonthLabel(mesParam)}`
 

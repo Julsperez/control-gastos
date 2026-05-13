@@ -43,7 +43,7 @@ export function useAuth() {
       const response = await svc.register({ email, password, full_name })
       setAuth(response)
       showToast('Cuenta creada. ¡Bienvenido/a!', 'success', 3000)
-      navigate('/')
+      navigate('/gastos')
       return { success: true, emailTaken: false }
     } catch (err: unknown) {
       if (getStatusCode(err) === 409) {
