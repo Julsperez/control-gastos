@@ -40,5 +40,18 @@ export function useBudget() {
     }
   }, [setBudgetStatus, showToast])
 
-  return { budgetStatus, isLoading, refetch, updateSettings }
+  const setMonthlyBudget = useCallback(async (mes: string, amount: number | null): Promise<boolean> => {
+    try {
+      const svc = await getGastosService()
+      const status = await svc.setMonthlyBudget(mes, amount)
+      if (mes === mesActual) setBudgetStatus(status)
+      showToast(amount === null ? 'Presupuesto del mes eliminado' : 'Presupuesto del mes guardado', 'success')
+      return true
+    } catch {
+      showToast('No se pudo guardar el presupuesto del mes', 'error')
+      return false
+    }
+  }, [mesActual, setBudgetStatus, showToast])
+
+  return { budgetStatus, isLoading, refetch, updateSettings, setMonthlyBudget }
 }

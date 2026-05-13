@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 
 class BudgetUpdate(BaseModel):
@@ -44,3 +44,22 @@ class BudgetStatus(BaseModel):
     alert_level: Literal["none", "warning", "critical", "exceeded"]
     alert_threshold_warning: int
     alert_threshold_critical: int
+    has_monthly_override: bool = False
+
+
+class MonthlyBudgetSet(BaseModel):
+    amount: float | None = None
+
+    @field_validator("amount")
+    @classmethod
+    def budget_positive(cls, v: float | None) -> float | None:
+        if v is not None and v <= 0:
+            raise ValueError("El presupuesto debe ser un valor positivo")
+        return v
+
+
+class MonthlyBudgetOut(BaseModel):
+    mes: str
+    amount: float
+
+    model_config = ConfigDict(from_attributes=True)

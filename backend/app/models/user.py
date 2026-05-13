@@ -25,3 +25,4 @@ class User(Base):
     gastos: Mapped[list["Gasto"]] = relationship("Gasto", back_populates="user", cascade="all, delete-orphan")  # noqa: F821
     refresh_tokens: Mapped[list["RefreshToken"]] = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")  # noqa: F821
     categorias_custom: Mapped[list["Categoria"]] = relationship("Categoria", back_populates="user", cascade="all, delete-orphan")  # noqa: F821
+    monthly_budgets: Mapped[list["MonthlyBudget"]] = relationship("MonthlyBudget", back_populates="user", cascade="all, delete-orphan")  # noqa: F821

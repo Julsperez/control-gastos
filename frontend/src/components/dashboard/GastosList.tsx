@@ -5,17 +5,9 @@ import { useGastosStore } from '../../store/gastosStore'
 import { useGastos } from '../../hooks/useGastos'
 import { getGastosService } from '../../services/GastosService'
 import type { Gasto } from '../../types'
+import { formatMonthLabel } from '../../types'
 
 const PREVIEW_COUNT = 5
-
-function formatMonthLabel(yyyymm: string): string {
-  const [y, m] = yyyymm.split('-').map(Number)
-  const label = new Date(y, m - 1, 1).toLocaleDateString('es-AR', {
-    month: 'long',
-    year: 'numeric',
-  })
-  return label.charAt(0).toUpperCase() + label.slice(1)
-}
 
 interface GastosListProps {
   onEdit: (gasto: Gasto) => void

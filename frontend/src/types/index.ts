@@ -149,6 +149,12 @@ export interface BudgetStatus {
   alert_level: AlertLevel
   alert_threshold_warning: number
   alert_threshold_critical: number
+  has_monthly_override?: boolean
+}
+
+export interface MonthlyBudgetEntry {
+  mes: string   // 'YYYY-MM'
+  amount: number
 }
 
 export interface BudgetSettings {
@@ -267,4 +273,13 @@ export function currentMonth(): string {
 
 export function todayISO(): string {
   return new Date().toISOString().split('T')[0]
+}
+
+export function formatMonthLabel(yyyymm: string): string {
+  const [y, m] = yyyymm.split('-').map(Number)
+  const label = new Date(y, m - 1, 1).toLocaleDateString('es-AR', {
+    month: 'long',
+    year: 'numeric',
+  })
+  return label.charAt(0).toUpperCase() + label.slice(1)
 }

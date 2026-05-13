@@ -1,11 +1,12 @@
 import { Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { BudgetStatus } from '../../types'
-import { formatCurrency } from '../../types'
+import { currentMonth, formatCurrency, formatMonthLabel } from '../../types'
 
 interface Props {
   status: BudgetStatus | null
   isLoading?: boolean
+  mes?: string
 }
 
 const barColor: Record<string, string> = {
@@ -22,8 +23,12 @@ const remainingColor: Record<string, string> = {
   exceeded: 'text-[var(--accent-danger)]',
 }
 
-export function BudgetWidget({ status, isLoading }: Props) {
+export function BudgetWidget({ status, isLoading, mes }: Props) {
   const navigate = useNavigate()
+  const mesParam = mes ?? currentMonth()
+  const settingsUrl = `/settings?mes=${mesParam}`
+  const isCurrentMonth = mesParam === currentMonth()
+  const monthLabel = isCurrentMonth ? 'Presupuesto mensual' : `Presupuesto — ${formatMonthLabel(mesParam)}`
 
   if (isLoading) {
     return (
@@ -39,9 +44,13 @@ export function BudgetWidget({ status, isLoading }: Props) {
   if (!status || status.budget === null) {
     return (
       <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)] p-4 flex items-center justify-between gap-3">
-        <p className="text-sm text-[var(--text-tertiary)]">Sin presupuesto mensual configurado</p>
+        <p className="text-sm text-[var(--text-tertiary)]">
+          {isCurrentMonth
+            ? 'Sin presupuesto mensual configurado'
+            : `Sin presupuesto para ${formatMonthLabel(mesParam)}`}
+        </p>
         <button
-          onClick={() => navigate('/settings')}
+          onClick={() => navigate(settingsUrl)}
           className="text-sm font-medium text-[var(--accent-primary)] hover:underline flex items-center gap-1 shrink-0"
         >
           <Settings size={14} />
@@ -58,9 +67,9 @@ export function BudgetWidget({ status, isLoading }: Props) {
   return (
     <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)] p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-[var(--text-secondary)]">Presupuesto mensual</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-secondary)]">{monthLabel}</h3>
         <button
-          onClick={() => navigate('/settings')}
+          onClick={() => navigate(settingsUrl)}
           className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
           aria-label="Configurar presupuesto"
         >

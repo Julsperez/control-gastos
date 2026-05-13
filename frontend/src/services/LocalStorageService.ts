@@ -438,4 +438,14 @@ export class LocalStorageGastosService implements IGastosService {
     const spent = gastos.reduce((acc, g) => acc + g.amount, 0)
     return this.computeBudgetStatus(settings, spent)
   }
+
+  async getMonthlyBudgets(): Promise<import('../types').MonthlyBudgetEntry[]> {
+    return []
+  }
+
+  async setMonthlyBudget(_mes: string, _amount: number | null): Promise<BudgetStatus> {
+    const gastos = this.readGastos().filter((g) => g.fecha.startsWith(currentMonth()))
+    const spent = gastos.reduce((acc, g) => acc + g.amount, 0)
+    return this.computeBudgetStatus(this.readBudgetSettings(), spent)
+  }
 }

@@ -12,6 +12,7 @@ import type {
   GastoUpdate,
   GastosResponse,
   LoginRequest,
+  MonthlyBudgetEntry,
   RegisterRequest,
 } from '../types'
 import type { IGastosService } from './GastosService'
@@ -181,6 +182,16 @@ export class ApiGastosService implements IGastosService {
 
   async updateBudgetSettings(settings: BudgetSettings): Promise<BudgetStatus> {
     const res = await this.client.put<BudgetStatus>('/budget/settings', settings)
+    return res.data
+  }
+
+  async getMonthlyBudgets(): Promise<MonthlyBudgetEntry[]> {
+    const res = await this.client.get<MonthlyBudgetEntry[]>('/budget/monthly')
+    return res.data
+  }
+
+  async setMonthlyBudget(mes: string, amount: number | null): Promise<BudgetStatus> {
+    const res = await this.client.put<BudgetStatus>(`/budget/monthly/${mes}`, { amount })
     return res.data
   }
 }

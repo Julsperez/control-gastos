@@ -4,6 +4,7 @@ from sqlalchemy import text
 
 from app.config import settings
 from app.database import Base, engine
+from app.models import monthly_budget as _mb_model  # noqa: F401 — registra tabla en metadata
 from app.routers import auth, budget, categorias, dashboard, gastos
 
 # Crear tablas nuevas (idempotente)

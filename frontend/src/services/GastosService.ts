@@ -11,6 +11,7 @@ import type {
   GastoUpdate,
   GastosResponse,
   LoginRequest,
+  MonthlyBudgetEntry,
   RegisterRequest,
 } from '../types'
 
@@ -43,6 +44,8 @@ export interface IGastosService {
   // Budget
   getBudgetStatus(mes?: string): Promise<BudgetStatus>
   updateBudgetSettings(settings: BudgetSettings): Promise<BudgetStatus>
+  getMonthlyBudgets(): Promise<MonthlyBudgetEntry[]>
+  setMonthlyBudget(mes: string, amount: number | null): Promise<BudgetStatus>
 }
 
 // ============================================================

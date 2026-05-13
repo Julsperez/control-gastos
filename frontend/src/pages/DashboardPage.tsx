@@ -17,6 +17,7 @@ import { useDashboard } from '../hooks/useDashboard'
 import { useBudget } from '../hooks/useBudget'
 import { useAuth } from '../hooks/useAuth'
 import { useAuthStore } from '../store/authStore'
+import { useGastosStore } from '../store/gastosStore'
 import { Button } from '../components/ui/Button'
 import { ThemeToggle } from '../components/ui/ThemeToggle'
 
@@ -41,6 +42,7 @@ export function DashboardPage() {
   const isFormOpen = formOpen || editingGasto !== null
   const { dashboard, isLoading, error, refetch } = useDashboard()
   const { budgetStatus } = useBudget()
+  const mesActual = useGastosStore((s) => s.mesActual)
   const { logout } = useAuth()
   const user = useAuthStore((s) => s.user)
   const isMobile = useIsMobile()
@@ -133,7 +135,7 @@ export function DashboardPage() {
           <>
             {/* Layout mobile: una columna */}
             <div className="lg:hidden flex flex-col gap-3 p-4 pb-24">
-              <BudgetWidget status={budgetStatus} />
+              <BudgetWidget status={budgetStatus} mes={mesActual} />
               <ResumenMes
                 totalMes={dashboard.total_mes}
                 totalMesAnterior={dashboard.total_mes_anterior}
@@ -160,7 +162,7 @@ export function DashboardPage() {
                 )}
               </div>
               <div className="flex flex-col gap-4">
-                <BudgetWidget status={budgetStatus} />
+                <BudgetWidget status={budgetStatus} mes={mesActual} />
                 <Button
                   variant="primary"
                   size="md"
