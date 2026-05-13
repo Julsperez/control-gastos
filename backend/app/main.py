@@ -15,6 +15,8 @@ _COLUMN_MIGRATIONS = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS monthly_budget NUMERIC(12, 2)",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_threshold_warning INTEGER NOT NULL DEFAULT 70",
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS alert_threshold_critical INTEGER NOT NULL DEFAULT 90",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token VARCHAR(64)",
+    "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP",
 ]
 for _stmt in _COLUMN_MIGRATIONS:
     with engine.begin() as _conn:

@@ -24,6 +24,8 @@ export interface IGastosService {
   register(data: RegisterRequest): Promise<AuthResponse>
   login(data: LoginRequest): Promise<AuthResponse>
   refresh(refresh_token: string): Promise<AuthTokens>
+  forgotPassword(email: string): Promise<void>
+  resetPassword(token: string, newPassword: string): Promise<void>
 
   // Gastos
   getGastos(mes?: string, categoria_id?: number): Promise<GastosResponse>

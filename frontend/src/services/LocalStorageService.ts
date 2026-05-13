@@ -170,6 +170,14 @@ export class LocalStorageGastosService implements IGastosService {
     }
   }
 
+  async forgotPassword(_email: string): Promise<void> {
+    await delay(300)
+  }
+
+  async resetPassword(_token: string, _newPassword: string): Promise<void> {
+    await delay(300)
+  }
+
   private buildAuthResponse(user: StoredUser): AuthResponse {
     const publicUser: User = { id: user.id, email: user.email, full_name: user.full_name }
     return {

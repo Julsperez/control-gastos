@@ -48,9 +48,9 @@ export function LoginForm() {
           disabled={isLoading}
         />
         <div className="flex justify-end">
-          <span className="text-sm text-[var(--accent-primary)] cursor-not-allowed opacity-60">
+          <Link to="/forgot-password" className="text-sm text-[var(--accent-primary)] hover:underline">
             ¿Olvidaste tu contraseña?
-          </span>
+          </Link>
         </div>
       </div>
 

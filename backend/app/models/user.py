@@ -22,6 +22,9 @@ class User(Base):
     alert_threshold_warning: Mapped[int] = mapped_column(Integer, nullable=False, default=70)
     alert_threshold_critical: Mapped[int] = mapped_column(Integer, nullable=False, default=90)
 
+    reset_token: Mapped[str | None] = mapped_column(String(64), nullable=True, default=None)
+    reset_token_expires: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, default=None)
+
     gastos: Mapped[list["Gasto"]] = relationship("Gasto", back_populates="user", cascade="all, delete-orphan")  # noqa: F821
     refresh_tokens: Mapped[list["RefreshToken"]] = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")  # noqa: F821
     categorias_custom: Mapped[list["Categoria"]] = relationship("Categoria", back_populates="user", cascade="all, delete-orphan")  # noqa: F821

@@ -5,6 +5,8 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { useAuthStore } from './store/authStore'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -54,6 +56,8 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
